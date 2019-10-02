@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2019
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationWS", "IntegrationWS\IntegrationWS.csproj", "{17E57243-D13B-41B1-AAF2-5E4747A0C10A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17E57243-D13B-41B1-AAF2-5E4747A0C10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E57243-D13B-41B1-AAF2-5E4747A0C10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E57243-D13B-41B1-AAF2-5E4747A0C10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E57243-D13B-41B1-AAF2-5E4747A0C10A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B15462C9-479A-4466-B2AA-66B40C98EC8E}
+	EndGlobalSection
+EndGlobal

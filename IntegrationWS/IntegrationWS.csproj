@@ -1,0 +1,1130 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{17E57243-D13B-41B1-AAF2-5E4747A0C10A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IntegrationWS</RootNamespace>
+    <AssemblyName>IntegrationWS</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44345</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.5.5.0\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading, Version=4.0.11.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Threading.Tasks, Version=4.0.11.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Unity.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.0.3.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.2.0.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ServiceLocation, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.WebApi, Version=5.3.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.WebAPI.5.3.0\lib\net45\Unity.WebApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.4\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.4\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\DynamicsGPService\DynamicsGP.wsdl" />
+    <None Include="Connected Services\DynamicsGPService\GPService.disco" />
+    <None Include="Connected Services\DynamicsGPService\configuration91.svcinfo" />
+    <None Include="Connected Services\DynamicsGPService\configuration.svcinfo" />
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Applicant.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantApplication.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantApplicationSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantEducation.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantInterview.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantInterviewSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantReference.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantReferenceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantSkill.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantTest.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ApplicantWorkHistory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.BackOfficeRole.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.BackOfficeRoleAssignment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Bank.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Batch.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.BusinessObjectSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.BusinessObjectUserAssignment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CashReceipt.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CashReceiptSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedCurrencyKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedCustomerAddressKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedCustomerKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedInternetAddressKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedItemKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedPriceLevelKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedPricingKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedSalesInvoiceKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedSalesOrderKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedSalespersonKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedShippingMethodKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedTaxDetailKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedTaxScheduleDetailKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ChangedUofMScheduleKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Company.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CompanyAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CorporateAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CountryRegionCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Currency.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CurrencyAccess.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CurrencyPostingAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Customer.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CustomerAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CustomerAddressSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CustomerReceivablesSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.CustomerSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.DynamicsOnlineConfiguration.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Employee.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.EmployeeAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.EmployeeAddressSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.EmployeePayCode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.EmployeePayCodeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.EmployeeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Fee.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.FeeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLAccountCategory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLAccountFormat.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLAccountSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLFixedAllocationAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLFixedAllocationAccountSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLPostingAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLPostingAccountSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLTransaction.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLTransactionSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLUnitAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLUnitAccountSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLVariableAllocationAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.GLVariableAllocationAccountSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.HRRequisition.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.HRRequisitionSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoriedItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoriedItemSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryAdjustment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryAdjustmentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryTransfer.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryTransferSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryVariance.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.InventoryVarianceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Item.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemClass.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemCurrency.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemVendor.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemVendorSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemWarehouse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ItemWarehouseSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.LoggedExceptionData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.LoggedExceptionDataSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ManufacturingOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ManufacturingOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.MulticurrencySetup.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesCreditMemo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesCreditMemoSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesDocumentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesFinanceCharge.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesFinanceChargeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesInvoice.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesInvoiceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesMiscellaneousCharge.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesMiscellaneousChargeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesReturn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PayablesReturnSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PaymentCardType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PaymentTerms.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PlannedOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PlannedOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Policy.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PolicySummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PostedPayablesVendorPayment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PostedPayablesVendorPaymentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PriceLevel.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Pricing.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PricingSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Project.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectBudget.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectBudgetSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectChangeOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectChangeOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectContract.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectContractSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectEmployeeExpense.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectEmployeeExpenseSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectMiscellaneousLog.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectMiscellaneousLogSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectTimesheet.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ProjectTimesheetSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseInvoice.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseInvoiceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseReceipt.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.PurchaseReceiptSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesCreditMemo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesCreditMemoSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesDebitMemo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesDebitMemoSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesDocumentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesFinanceCharge.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesFinanceChargeSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesInvoice.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesInvoiceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesReturn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesReturnSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesServiceRepair.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesServiceRepairSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesWarranty.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReceivablesWarrantySummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReturnMaterialAuthorization.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ReturnMaterialAuthorizationSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.RoleKey.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesBackorder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesBackorderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesDocumentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesFulfillmentOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesFulfillmentOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesInvoice.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesInvoiceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Salesperson.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalespersonCommissions.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalespersonCommissionsSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalespersonSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesProcessHoldSetup.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesQuote.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesQuoteSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesReturn.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesReturnSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesTerritory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SalesTerritorySummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Service.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceCall.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceCallSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceEquipment.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceEquipmentSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceQuote.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceQuoteSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ServiceSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ShippingMethod.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Skill.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SkillSet.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.SkillSetSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.TaxDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.TaxSchedule.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.TaxScheduleDetail.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Tenant.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.UofMSchedule.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.UofMScheduleSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.UserAssignableBusinessObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.ValidationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Vendor.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorAddress.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorAddressSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorManufacturingOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorManufacturingOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorPlannedOrder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorPlannedOrderSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.VendorSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.Warehouse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\DynamicsGPService\IntegrationWS.DynamicsGPService.WarehouseSummary.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\DynamicsGPService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Connected Services\DynamicsGPService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\BillController.cs" />
+    <Compile Include="Controllers\BulkApiController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\QuoteController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Data\ApplicationDbContext.cs" />
+    <Compile Include="Data\BnrdDbContext.cs" />
+    <Compile Include="Data\BnrdDbContextToRemove.cs" />
+    <Compile Include="Data\DevelopmentDbContext.cs" />
+    <Compile Include="DTOs\CaseDTO.cs" />
+    <Compile Include="DTOs\LeadDTO.cs" />
+    <Compile Include="DTOs\UserForLoginDTO.cs" />
+    <Compile Include="DTOs\UserForRegisterDTO.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Integrations\Activos.cs" />
+    <Compile Include="Integrations\ArticulosProductos.cs" />
+    <Compile Include="Integrations\DocumentoAbierto.cs" />
+    <Compile Include="Integrations\EntradaDelCatalogoDePrecios.cs" />
+    <Compile Include="Integrations\ExcepcionesFEFO.cs" />
+    <Compile Include="Integrations\ExcepcionesFEFODetalle.cs" />
+    <Compile Include="Integrations\Interfaces\IActivos.cs" />
+    <Compile Include="Integrations\Interfaces\IArticulosProductos.cs" />
+    <Compile Include="Integrations\Interfaces\IDocumentoAbierto.cs" />
+    <Compile Include="Integrations\Interfaces\IEntradaDelCatalogoDePrecios.cs" />
+    <Compile Include="Integrations\Interfaces\IExcepcionesFEFO.cs" />
+    <Compile Include="Integrations\Interfaces\IExcepcionesFEFODetalle.cs" />
+    <Compile Include="Integrations\Interfaces\IListaDePrecios.cs" />
+    <Compile Include="Integrations\Interfaces\IOportunidades.cs" />
+    <Compile Include="Integrations\Interfaces\IProductoConLoteUtils.cs" />
+    <Compile Include="Integrations\Interfaces\IProductoDeOportunidad.cs" />
+    <Compile Include="Integrations\Interfaces\IProductos.cs" />
+    <Compile Include="Integrations\Interfaces\ITransferenciasProductos.cs" />
+    <Compile Include="Integrations\Interfaces\IUbicaciones.cs" />
+    <Compile Include="Integrations\ListaDePrecios.cs" />
+    <Compile Include="Integrations\Oportunidades.cs" />
+    <Compile Include="Integrations\ProductoConLoteUtils.cs" />
+    <Compile Include="Integrations\ProductoDeOportunidad.cs" />
+    <Compile Include="Integrations\Productos.cs" />
+    <Compile Include="Integrations\TransferenciasProductos.cs" />
+    <Compile Include="Integrations\Ubicaciones.cs" />
+    <Compile Include="Migrations.BNRD\Configuration.cs" />
+    <Compile Include="Migrations.Development\201810161337113_IniciandoDevelopmentMigrations.cs" />
+    <Compile Include="Migrations.Development\201810161337113_IniciandoDevelopmentMigrations.Designer.cs">
+      <DependentUpon>201810161337113_IniciandoDevelopmentMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations.Development\201810171317301_agregandoCampoAtablaGA.cs" />
+    <Compile Include="Migrations.Development\201810171317301_agregandoCampoAtablaGA.Designer.cs">
+      <DependentUpon>201810171317301_agregandoCampoAtablaGA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations.Development\201810181309414_EliminandoTablas.cs" />
+    <Compile Include="Migrations.Development\201810181309414_EliminandoTablas.Designer.cs">
+      <DependentUpon>201810181309414_EliminandoTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations.Development\Configuration.cs" />
+    <Compile Include="Migrations\201810151436049_IniciandoProyecto.cs" />
+    <Compile Include="Migrations\201810151436049_IniciandoProyecto.Designer.cs">
+      <DependentUpon>201810151436049_IniciandoProyecto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810151810526_AnadiendoNuevosCampos.cs" />
+    <Compile Include="Migrations\201810151810526_AnadiendoNuevosCampos.Designer.cs">
+      <DependentUpon>201810151810526_AnadiendoNuevosCampos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810171953476_eliminando.cs" />
+    <Compile Include="Migrations\201810171953476_eliminando.Designer.cs">
+      <DependentUpon>201810171953476_eliminando.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810171954370_eliminando1.cs" />
+    <Compile Include="Migrations\201810171954370_eliminando1.Designer.cs">
+      <DependentUpon>201810171954370_eliminando1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810181310195_EliminandoTablas.cs" />
+    <Compile Include="Migrations\201810181310195_EliminandoTablas.Designer.cs">
+      <DependentUpon>201810181310195_EliminandoTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810181311560_ReconstruyendoTablas.cs" />
+    <Compile Include="Migrations\201810181311560_ReconstruyendoTablas.Designer.cs">
+      <DependentUpon>201810181311560_ReconstruyendoTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810181341258_ReconstruyendoTablas1.cs" />
+    <Compile Include="Migrations\201810181341258_ReconstruyendoTablas1.Designer.cs">
+      <DependentUpon>201810181341258_ReconstruyendoTablas1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810251434308_AgregandoErrorLogs.cs" />
+    <Compile Include="Migrations\201810251434308_AgregandoErrorLogs.Designer.cs">
+      <DependentUpon>201810251434308_AgregandoErrorLogs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810291728400_AgregandoTablaAppState.cs" />
+    <Compile Include="Migrations\201810291728400_AgregandoTablaAppState.Designer.cs">
+      <DependentUpon>201810291728400_AgregandoTablaAppState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811121532179_AgregandoTablaAccount.cs" />
+    <Compile Include="Migrations\201811121532179_AgregandoTablaAccount.Designer.cs">
+      <DependentUpon>201811121532179_AgregandoTablaAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811131400349_AgregandoTablaUsuarioYOportunidad.cs" />
+    <Compile Include="Migrations\201811131400349_AgregandoTablaUsuarioYOportunidad.Designer.cs">
+      <DependentUpon>201811131400349_AgregandoTablaUsuarioYOportunidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811231847153_AgregandoNuevasTablas.cs" />
+    <Compile Include="Migrations\201811231847153_AgregandoNuevasTablas.Designer.cs">
+      <DependentUpon>201811231847153_AgregandoNuevasTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812041215194_AgregandoAccountTeamMemberTable.cs" />
+    <Compile Include="Migrations\201812041215194_AgregandoAccountTeamMemberTable.Designer.cs">
+      <DependentUpon>201812041215194_AgregandoAccountTeamMemberTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812041252194_AgregandoNuevoCampo.cs" />
+    <Compile Include="Migrations\201812041252194_AgregandoNuevoCampo.Designer.cs">
+      <DependentUpon>201812041252194_AgregandoNuevoCampo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812181421291_agregandoTablaOppTeamMembr.cs" />
+    <Compile Include="Migrations\201812181421291_agregandoTablaOppTeamMembr.Designer.cs">
+      <DependentUpon>201812181421291_agregandoTablaOppTeamMembr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901161537533_AgregandoAsset.cs" />
+    <Compile Include="Migrations\201901161537533_AgregandoAsset.Designer.cs">
+      <DependentUpon>201901161537533_AgregandoAsset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902061548407_AgregandoTablaPedido.cs" />
+    <Compile Include="Migrations\201902061548407_AgregandoTablaPedido.Designer.cs">
+      <DependentUpon>201902061548407_AgregandoTablaPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902061759146_ActualizandoNombresTablaPedido.cs" />
+    <Compile Include="Migrations\201902061759146_ActualizandoNombresTablaPedido.Designer.cs">
+      <DependentUpon>201902061759146_ActualizandoNombresTablaPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902151809384_AgregandoTablaExcepcionFefo.cs" />
+    <Compile Include="Migrations\201902151809384_AgregandoTablaExcepcionFefo.Designer.cs">
+      <DependentUpon>201902151809384_AgregandoTablaExcepcionFefo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903041915195_ModificandoTablaPedido.cs" />
+    <Compile Include="Migrations\201903041915195_ModificandoTablaPedido.Designer.cs">
+      <DependentUpon>201903041915195_ModificandoTablaPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903262005027_AgregandoTablaDocumentoAbierto.cs" />
+    <Compile Include="Migrations\201903262005027_AgregandoTablaDocumentoAbierto.Designer.cs">
+      <DependentUpon>201903262005027_AgregandoTablaDocumentoAbierto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ModelsNotMapped\AccountSf.cs" />
+    <Compile Include="ModelsNotMapped\AccountTeamMember.cs" />
+    <Compile Include="ModelsNotMapped\Asset1.cs" />
+    <Compile Include="ModelsNotMapped\AssetToUpdate.cs" />
+    <Compile Include="ModelsNotMapped\BulkApi.cs" />
+    <Compile Include="ModelsNotMapped\CargoAdicional.cs" />
+    <Compile Include="ModelsNotMapped\citas.cs" />
+    <Compile Include="ModelsNotMapped\Detalle_de_Excepci_n_FEFO__c.cs" />
+    <Compile Include="ModelsNotMapped\DocumentoAbiertoSf.cs" />
+    <Compile Include="ModelsNotMapped\Excepci_n_FEFO__c.cs" />
+    <Compile Include="ModelsNotMapped\LocationSf.cs" />
+    <Compile Include="ModelsNotMapped\OpportunityLineItem.cs" />
+    <Compile Include="ModelsNotMapped\OpportunitySplit.cs" />
+    <Compile Include="ModelsNotMapped\OpportunityTeamMember.cs" />
+    <Compile Include="ModelsNotMapped\OpportunityToUpdate.cs" />
+    <Compile Include="ModelsNotMapped\OpportunitySf.cs" />
+    <Compile Include="ModelsNotMapped\ordenConCita.cs" />
+    <Compile Include="ModelsNotMapped\Pricebook2.cs" />
+    <Compile Include="ModelsNotMapped\PricebookEntry.cs" />
+    <Compile Include="ModelsNotMapped\PricebookEntryToDelete.cs" />
+    <Compile Include="ModelsNotMapped\PricebookEntryToUpdate.cs" />
+    <Compile Include="ModelsNotMapped\product.cs" />
+    <Compile Include="ModelsNotMapped\Product2.cs" />
+    <Compile Include="ModelsNotMapped\Product2ToDelete.cs" />
+    <Compile Include="ModelsNotMapped\ProductItem.cs" />
+    <Compile Include="ModelsNotMapped\ProductItemSimple.cs" />
+    <Compile Include="ModelsNotMapped\ProductItemInDynamics.cs" />
+    <Compile Include="ModelsNotMapped\ProductItemLot.cs" />
+    <Compile Include="ModelsNotMapped\ProductItemSerie.cs" />
+    <Compile Include="ModelsNotMapped\ProductItemToUpdate.cs" />
+    <Compile Include="ModelsNotMapped\ProductoConLote.cs" />
+    <Compile Include="ModelsNotMapped\ProductoConLoteUpdate.cs" />
+    <Compile Include="ModelsNotMapped\Prueba.cs" />
+    <Compile Include="ModelsNotMapped\SfResponseModel.cs" />
+    <Compile Include="ModelsNotMapped\ProductTransfer.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\Asset.cs" />
+    <Compile Include="Models\Documento_Abierto.cs" />
+    <Compile Include="Models\EquiposDeCuenta.cs" />
+    <Compile Include="Models\AppState.cs" />
+    <Compile Include="Models\ArticuloProducto.cs" />
+    <Compile Include="Models\Entrada_del_catalogo_de_precios.cs" />
+    <Compile Include="Models\EquiposDeOportunidad.cs" />
+    <Compile Include="Models\ErrorLogs.cs" />
+    <Compile Include="Models\General_Audit.cs" />
+    <Compile Include="Models\General_Audit_History.cs" />
+    <Compile Include="Models\LIsta_De_Precios.cs" />
+    <Compile Include="Models\Oportunidad.cs" />
+    <Compile Include="Models\Pedido.cs" />
+    <Compile Include="Models\Producto.cs" />
+    <Compile Include="Models\Producto_de_oportunidad.cs" />
+    <Compile Include="Models\TransferenciaProducto.cs" />
+    <Compile Include="Models\Ubicacion.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\ViolacionesFEFO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Integrations\Cuentas.cs" />
+    <Compile Include="Utils\AuthRepository.cs" />
+    <Compile Include="Utils\AuthToSalesforce.cs" />
+    <Compile Include="Utils\DynamicsTransfers.cs" />
+    <Compile Include="Integrations\Interfaces\ICuentas.cs" />
+    <Compile Include="Utils\Interfaces\IAuthRepository.cs" />
+    <Compile Include="Utils\Interfaces\IAuthToSalesforce.cs" />
+    <Compile Include="Utils\Interfaces\IDynamicsTransfers.cs" />
+    <Compile Include="Utils\Interfaces\IReadGpTables.cs" />
+    <Compile Include="Utils\Interfaces\IResponseAfterAuth.cs" />
+    <Compile Include="Utils\Interfaces\ISobjectCRUD.cs" />
+    <Compile Include="Utils\Interfaces\IStringCipher.cs" />
+    <Compile Include="Utils\ReadGpTables.cs" />
+    <Compile Include="Utils\ResponseAfterAuth.cs" />
+    <Compile Include="Utils\SobjectCRUD.cs" />
+    <Compile Include="Utils\StringCipher.cs" />
+    <Compile Include="Utils\TokenGenerator.cs" />
+    <Compile Include="Utils\TokenValidationHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings1.pubxml" />
+    <None Include="Properties\PublishProfiles\Default Settings2.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations.Development\201810161337113_IniciandoDevelopmentMigrations.resx">
+      <DependentUpon>201810161337113_IniciandoDevelopmentMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations.Development\201810171317301_agregandoCampoAtablaGA.resx">
+      <DependentUpon>201810171317301_agregandoCampoAtablaGA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations.Development\201810181309414_EliminandoTablas.resx">
+      <DependentUpon>201810181309414_EliminandoTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810151436049_IniciandoProyecto.resx">
+      <DependentUpon>201810151436049_IniciandoProyecto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810151810526_AnadiendoNuevosCampos.resx">
+      <DependentUpon>201810151810526_AnadiendoNuevosCampos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810171953476_eliminando.resx">
+      <DependentUpon>201810171953476_eliminando.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810171954370_eliminando1.resx">
+      <DependentUpon>201810171954370_eliminando1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810181310195_EliminandoTablas.resx">
+      <DependentUpon>201810181310195_EliminandoTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810181311560_ReconstruyendoTablas.resx">
+      <DependentUpon>201810181311560_ReconstruyendoTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810181341258_ReconstruyendoTablas1.resx">
+      <DependentUpon>201810181341258_ReconstruyendoTablas1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810251434308_AgregandoErrorLogs.resx">
+      <DependentUpon>201810251434308_AgregandoErrorLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810291728400_AgregandoTablaAppState.resx">
+      <DependentUpon>201810291728400_AgregandoTablaAppState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811121532179_AgregandoTablaAccount.resx">
+      <DependentUpon>201811121532179_AgregandoTablaAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811131400349_AgregandoTablaUsuarioYOportunidad.resx">
+      <DependentUpon>201811131400349_AgregandoTablaUsuarioYOportunidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811231847153_AgregandoNuevasTablas.resx">
+      <DependentUpon>201811231847153_AgregandoNuevasTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812041215194_AgregandoAccountTeamMemberTable.resx">
+      <DependentUpon>201812041215194_AgregandoAccountTeamMemberTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812041252194_AgregandoNuevoCampo.resx">
+      <DependentUpon>201812041252194_AgregandoNuevoCampo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812181421291_agregandoTablaOppTeamMembr.resx">
+      <DependentUpon>201812181421291_agregandoTablaOppTeamMembr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901161537533_AgregandoAsset.resx">
+      <DependentUpon>201901161537533_AgregandoAsset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061548407_AgregandoTablaPedido.resx">
+      <DependentUpon>201902061548407_AgregandoTablaPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061759146_ActualizandoNombresTablaPedido.resx">
+      <DependentUpon>201902061759146_ActualizandoNombresTablaPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902151809384_AgregandoTablaExcepcionFefo.resx">
+      <DependentUpon>201902151809384_AgregandoTablaExcepcionFefo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903041915195_ModificandoTablaPedido.resx">
+      <DependentUpon>201903041915195_ModificandoTablaPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903262005027_AgregandoTablaDocumentoAbierto.resx">
+      <DependentUpon>201903262005027_AgregandoTablaDocumentoAbierto.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\DynamicsGPService\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>59196</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:59196/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

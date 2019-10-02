@@ -1,0 +1,35 @@
+{
+"Username": "Admin",
+	"Password": "Adm123456.WBC"
+}
+
+USAR DOS DBCONTEXT
+
+https://www.youtube.com/watch?v=QNXHt96EYFg
+Ena
+
+Comando utilizado para la otra migracion ya que tengo dos dbcontext Migrations.Development es el folder a crear
+Enable-Migrations -ContextTypeName IntegrationWS.Data.BnrdDbContext -MigrationsDirectory Migrations.BNRD
+
+Agregando migracion a esta tabla
+Add-migration EliminandoTablas -ConfigurationTypeName IntegrationWS.Migrations.Development.Configuration
+
+Actualizando la db especificamente
+update-database -ConfigurationTypeName IntegrationWS.Migrations.Development.Configuration
+
+
+oportunidades || cuentas || tareas || contactos || registrar las visitas || enviar correos
+
+services/data/v43.0/query/?q=SELECT+id+from+Product2+WHERE+Id_External__c+LIKE+'11527'?
+services/data/v43.0/query/?q=SELECT+id+from+Product2+WHERE+Id_External__c+LIKE+'11527'
+
+Deyanira Tejada
+
+SELECT CreatedDate,Factura_Dynamics__c,Id,Pricebook2Id FROM Opportunity WHERE CreatedDate > 2018-11-01T00:30:07.000Z AND Pricebook2Id = ''
+
+SELECT CreatedDate,Id, Pricebook2Id  FROM Opportunity where CreatedDate > 2018-11-01T00:30:07.000Z AND Pricebook2Id = '01s15000001kBEgAAM'
+
+
+"[{\"message\":\"Error: No puede seleccionar los productos hasta que no haya seleccionado una lista de precios para esta oportunidad en la lista relacionada de los productos.\",\"errorCode\":\"REQUIRED_FIELD_MISSING\",\"fields\":[]}]"
+
+Server=myServerAddress;Database=myDataBase;User Id=myUsername; Password=myPassword;

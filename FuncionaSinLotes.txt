@@ -1,0 +1,149 @@
+public void Create()
+        {
+            CompanyKey companyKey;
+
+            Context context;
+
+            BatchKey batchKey;
+
+            ItemKey itemKey;
+
+            Quantity itemQuantity;
+
+            WarehouseKey fromWarehouseKey;
+
+            WarehouseKey toWarehouseKey;
+
+            InventoryKey inventoryKey;
+
+            InventoryLineKey inventoryLineKey;
+
+            InventoryTransfer inventoryTransfer;
+
+            InventoryTransferLine inventoryTransferLine;
+
+            Policy inventoryTransferCreatePolicy;
+
+            // Create an instance of the service 
+            DynamicsGPClient wsDynamicsGP = new DynamicsGPClient();
+
+            //// Be sure the default credentials are used
+            //wsDynamicsGP.UseDefaultCredentials = true;
+
+            // Create a context with which to call the service
+            context = new Context();
+
+            // Specify which company to use (sample company)
+            companyKey = new CompanyKey();
+
+            companyKey.Id = (1);
+
+            // Set up the context object
+            context.OrganizationKey = (OrganizationKey)companyKey;
+
+            // Create an inventory key to identify the inventory transfer object
+            inventoryKey = new InventoryKey();
+            inventoryKey.Id = "T00001";
+
+            // Create a batch key object to specify a batch for the inventory transfer
+            batchKey = new BatchKey();
+            batchKey.Id = "TRANSFER 100";  //Cualquier nomenclatura
+
+            // Create an inventory transfer object
+            inventoryTransfer = new InventoryTransfer();
+
+            // Populate the inventory transfer object's required properties
+            inventoryTransfer.Key = inventoryKey;
+            inventoryTransfer.BatchKey = batchKey;
+            inventoryTransfer.Date = DateTime.Today;
+
+            // Create an inventory transfer line object to detail the inventory transfer
+            inventoryTransferLine = new InventoryTransferLine();
+
+            // Create an inventory line key to identify the inventory transfer line object
+            inventoryLineKey = new InventoryLineKey();
+            inventoryLineKey.InventoryKey = inventoryKey;
+            inventoryLineKey.SequenceNumber = 16385;
+
+            // Create an item key object to specify the item
+            itemKey = new ItemKey();
+
+            //itemKey.Id = "128 SDRAM";
+            itemKey.Id = "000-791-150                    ";
+
+            // Create a quantity object to specify the amount of the transfer
+            itemQuantity = new Quantity();
+
+            itemQuantity.Value = 1m;            //<---------- How to get this data?
+
+            // Create a warehouse key to specify the location originating the transfer
+            fromWarehouseKey = new WarehouseKey();
+
+            //fromWarehouseKey.Id = "NORTH";
+            fromWarehouseKey.Id = "REPUESTOS  ";  //<---------- How to get this data
+
+            // Create a warehouse key to specify the location receiving the transfer
+            toWarehouseKey = new WarehouseKey();
+
+            //toWarehouseKey.Id = "WAREHOUSE";
+            toWarehouseKey.Id = "HERRERA    ";        //<----------How to get this info
+
+            ///////////////////////// CONTROL LOTS //////////////////////////////////
+            //Quantity itemQuantityLot = new Quantity();
+            //itemQuantityLot.Value = 1m;
+
+            //itemQuantityLot.DecimalDigits = 2;  //<-----------This line has been tested with an witout dada
+
+            ////Desconosco si este es obligatorio o no, se ha probado ambos casos
+            //InventoryLotKey inventoryLotKey = new InventoryLotKey();
+            //inventoryLotKey.CompanyKey = companyKey;
+            //inventoryLotKey.InventoryLineKey = inventoryLineKey;
+            //inventoryLotKey.SequenceNumber = 16385; //
+
+            //InventoryTransferLot inventoryTransferLot = new InventoryTransferLot();
+            //inventoryTransferLot.Key = inventoryLotKey;
+            //inventoryTransferLot.LotNumber = "505494602            ";
+            //inventoryTransferLot.Quantity = itemQuantityLot;
+            //inventoryTransferLot.ReceivedDate = Convert.ToDateTime("08/01/2018");
+            //inventoryTransferLot.ManufacturedDate = Convert.ToDateTime("08/02/2018");
+            //inventoryTransferLot.ExpirationDate = Convert.ToDateTime("08/31/2019");
+
+            //inventoryTransferLot.BinFrom = "";
+
+            //InventoryTransferLot[] Lots = { inventoryTransferLot };
+
+            ////////////////////////// END CONTROL LOTS ///////////////////////////////
+
+            // Populate the required properties of the inventory transfer line object
+
+            inventoryTransferLine.Key = inventoryLineKey;
+            inventoryTransferLine.ItemKey = itemKey;
+            inventoryTransferLine.Quantity = itemQuantity;
+            inventoryTransferLine.WarehouseFromKey = fromWarehouseKey;
+            inventoryTransferLine.WarehouseToKey = toWarehouseKey;
+           // inventoryTransferLine.Lots = Lots;  //<-----
+
+
+            // Create an array to hold the inventory transfer line object
+
+            InventoryTransferLine[] lines = { inventoryTransferLine };
+
+            // Add the array of inventory transfer lines to the inventory transfer object
+
+            inventoryTransfer.Lines = lines;
+
+            // Get the create policy for an inventory transfer
+
+            inventoryTransferCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreateInventoryTransfer", context);
+
+            // Create the inventory transfer
+
+            wsDynamicsGP.CreateInventoryTransfer(inventoryTransfer, context, inventoryTransferCreatePolicy);
+
+            // Close the service 
+            if (wsDynamicsGP.State != CommunicationState.Faulted)
+            {
+                wsDynamicsGP.Close();
+            }
+
+        }
