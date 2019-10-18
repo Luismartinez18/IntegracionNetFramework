@@ -32,5 +32,6 @@ namespace IntegrationWS.ModelsNotMapped
         public int? Tiempo_de_recogida__c { get; set; }
         public int? Tiempo_de_facturaci_n__c { get; set; }
         public string COMMNTID__c { get; set; }
+        public string PaymentTerm__c { get; set; }
     }
 }

@@ -158,9 +158,9 @@ namespace IntegrationWS.Integrations
             // Create a Inventory key 
             itemKey = new ItemKey();
             itemKey.Id = Id;
-            
-            item = wsDynamicsGP.GetItemByKey(itemKey, context);
 
+            item = wsDynamicsGP.GetItemByKey(itemKey, context);          
+            
             // Close the service 
             if (wsDynamicsGP.State != CommunicationState.Faulted)
             {

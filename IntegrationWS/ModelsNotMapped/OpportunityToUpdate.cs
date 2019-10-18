@@ -21,5 +21,6 @@ namespace IntegrationWS.ModelsNotMapped
         public string Referencia__c { get; set; }
         public string Factura_de_origen__c { get; set; }
         public string URL_Factura_de_origen__c { get; set; }
+        public string PaymentTerm__c { get; set; }
     }
 }

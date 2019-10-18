@@ -174,6 +174,7 @@ namespace IntegrationWS.Integrations
                     oppToUpdate.Referencia__c = opportunity.Referencia__c;
                     oppToUpdate.Factura_de_origen__c = opportunity.Factura_de_origen__c;
                     oppToUpdate.URL_Factura_de_origen__c = opportunity.URL_Factura_de_origen__c;
+                    oppToUpdate.PaymentTerm__c = opportunity.PaymentTerm__c;
 
                     result = await _sobjectCRUD2.updateSobjectByIdAsync(loginResult, oppToUpdate, salesforceID, sobject);
                 }
