@@ -759,6 +759,43 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetContribuyentesCountResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetContribuyentesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetDocumentoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetNCF2Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetNCFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetPlacaResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetPlacaResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetSolicitudResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetSolicitudResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\WSMovilDGII\IntegrationWS.WSMovilDGII.GetVehiculoPorDATAMATRIXResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\WSMovilDGII\WSMovilDGII.disco" />
+    <None Include="Connected Services\WSMovilDGII\configuration91.svcinfo" />
+    <None Include="Connected Services\WSMovilDGII\configuration.svcinfo" />
+    <None Include="Connected Services\WSMovilDGII\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -772,10 +809,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\WSMovilDGII\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\BulkApiController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\RegistroGastoController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\QuoteController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -786,6 +829,7 @@
     <Compile Include="Data\DevelopmentDbContext.cs" />
     <Compile Include="DTOs\CaseDTO.cs" />
     <Compile Include="DTOs\LeadDTO.cs" />
+    <Compile Include="DTOs\RegistroGastoDTO.cs" />
     <Compile Include="DTOs\UserForLoginDTO.cs" />
     <Compile Include="DTOs\UserForRegisterDTO.cs" />
     <Compile Include="Global.asax.cs">
@@ -949,6 +993,7 @@
     <Compile Include="ModelsNotMapped\ProductoConLote.cs" />
     <Compile Include="ModelsNotMapped\ProductoConLoteUpdate.cs" />
     <Compile Include="ModelsNotMapped\Prueba.cs" />
+    <Compile Include="ModelsNotMapped\ResponseCreatePayableInvoice.cs" />
     <Compile Include="ModelsNotMapped\SfResponseModel.cs" />
     <Compile Include="ModelsNotMapped\ProductTransfer.cs" />
     <Compile Include="Models\Account.cs" />
@@ -987,12 +1032,14 @@
     <Compile Include="Utils\Interfaces\IStringCipher.cs" />
     <Compile Include="Utils\ReadGpTables.cs" />
     <Compile Include="Utils\ResponseAfterAuth.cs" />
+    <Compile Include="Utils\ResponseMessage.cs" />
     <Compile Include="Utils\SobjectCRUD.cs" />
     <Compile Include="Utils\StringCipher.cs" />
     <Compile Include="Utils\TokenGenerator.cs" />
     <Compile Include="Utils\TokenValidationHandler.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\WSMovilDGII\WSMovilDGII.wsdl" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\PublishProfiles\Default Settings1.pubxml" />
@@ -1088,6 +1135,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\DynamicsGPService\" />
+    <WCFMetadataStorage Include="Connected Services\WSMovilDGII\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

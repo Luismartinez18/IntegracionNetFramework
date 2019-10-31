@@ -1,4 +1,5 @@
-﻿using IntegrationWS.Utils.Interfaces;
+﻿using IntegrationWS.Utils;
+using IntegrationWS.Utils.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace IntegrationWS
         protected void Application_Start()
         {
             UnityConfig.RegisterComponents();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(WebApiConfig.Register);            
         }
     }
 }

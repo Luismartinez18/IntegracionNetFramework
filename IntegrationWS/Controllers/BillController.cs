@@ -111,7 +111,7 @@ namespace IntegrationWS.Controllers
                     batchKey.Id = $"Llamada{DateTime.Now.ToString("ddMMyyyy")}";
 
                     //Agregando comentario
-                    var comentario = $@"Numero de caso: {caseDTO.CaseNumber}, Serie del equipo: {caseDTO.Nmerodeserie},";
+                    var comentario = $@"Numero de caso: {caseDTO.CaseNumber}, Serie del equipo: {caseDTO.Nmerodeserie}, Nombre del activo: {caseDTO.Nombre_del_activo},";
 
                     //Creando string para comentario en factura
                     foreach (var item in caseDTO.OrdenesConCitas)
@@ -403,7 +403,7 @@ namespace IntegrationWS.Controllers
 
                             //using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                             //{
-                            //    pricebookEntry = db_dev.Database.SqlQuery<PricebookEntry>($"SP_GPSalesforce_Integracion_PricebookEntry_V2 'LISTA_DOP', '{cargoAdicional.Codigo}'").FirstOrDefault();
+                            //    pricebookEntry = db_dev.Database.SqlQuery<PricebookEntry>($"SP_GPSalesforce_Integracion_PricebookEntry_V2 'LISTA_', '{cargoAdicional.Codigo}'").FirstOrDefault();
 
                             //    if (pricebookEntry.UnitPrice != null)
                             //    {

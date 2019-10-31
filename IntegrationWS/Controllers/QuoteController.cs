@@ -86,7 +86,7 @@ namespace IntegrationWS.Controllers
 
 
                 //Agregando comentario
-                var comentario = $@"Numero de caso: {caseDTO.CaseNumber}, Serie del equipo: {caseDTO.Nmerodeserie},";
+                var comentario = $@"Numero de caso: {caseDTO.CaseNumber}, Serie del equipo: {caseDTO.Nmerodeserie}, Nombre del activo: {caseDTO.Nombre_del_activo},";
 
                 //Creando string para comentario en factura
                 foreach (var item in caseDTO.OrdenesConCitas)
@@ -285,7 +285,8 @@ namespace IntegrationWS.Controllers
                 salesOrder.Lines = orders.ToArray();
 
                 // Get the create policy for the sales order object
-                salesOrderCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreateSalesInvoice", context);
+                //salesOrderCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreateSalesInvoice", context);
+                salesOrderCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreateSalesQuote", context);
 
                 // Create the sales order
                 wsDynamicsGP.CreateSalesQuote(salesOrder, context, salesOrderCreatePolicy);

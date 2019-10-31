@@ -22,5 +22,6 @@ namespace IntegrationWS.DTOs
         public int companyKeyId { get; set; }
         public List<CargoAdicional> CargosAdicionales { get; set; }
         public decimal descuento { get; set; }
+        public string Nombre_del_activo { get; set; }
     }      
 }
