@@ -11,7 +11,7 @@ namespace IntegrationWS.Integrations.Interfaces
     {
         Task<OpportunitySf> getOne(string Id, string loginResult);
         Task<string> create(string Id, string loginResult, string authToken, string serviceURL);
-        Task<string> update(string Id, string loginResult, string authToken, string serviceURL);
+        Task<string> update(string Id, string loginResult, string authToken, string serviceURL, string SalesforceId);
         Task<string> delete(string loginResult, string Id);
     }
 }

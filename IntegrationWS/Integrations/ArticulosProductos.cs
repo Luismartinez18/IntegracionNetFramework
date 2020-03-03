@@ -267,6 +267,7 @@ namespace IntegrationWS.Integrations
                 else
                 {
                     productItem.QuantityOnHand = 0;
+
                     try
                     {
                         productItem.QuantityUnitOfMeasure = db_bnrd.Database.SqlQuery<string>($"select BASEUOFM from IV40201 where UOMSCHDL = (select UOMSCHDL from IV00101 where ITEMNMBR = '{productId}')").FirstOrDefault().Trim();
@@ -275,7 +276,6 @@ namespace IntegrationWS.Integrations
                     {
                         productItem.QuantityUnitOfMeasure = "UND";
                     }
-                    
                 }
                 
                 

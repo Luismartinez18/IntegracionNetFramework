@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,9 +10,14 @@ namespace IntegrationWS.ModelsNotMapped
     {
         public string Description { get; set; }
         public string StageName { get; set; } 
-        public DateTime CloseDate { get; set; } 
-        public decimal Amount { get; set; }
+        public DateTime CloseDate { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public decimal? Amount { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Pricebook2Id { get; set; } 
+
         public string AccountId { get; set; }
         public string Name { get; set; } 
         public string Factura_Dynamics__c { get; set; } 

@@ -85,6 +85,14 @@ namespace IntegrationWS.Integrations
 
         public async Task<string> delete(string loginResult, string Id)
         {
+            DocumentoAbiertoSf docAbiertoSf = new DocumentoAbiertoSf();
+
+            
+            if(Id.Trim().Length != 15 && Id.Trim().Length != 18)
+                Id = await _sobjectCRUD.rawQuery(loginResult, docAbiertoSf, Id, sobject);
+
+            if (string.IsNullOrEmpty(Id))
+                return "Ok";
 
             var result = await _sobjectCRUD.deleteSobjectByIdAsync(loginResult, Id, sobject);
 

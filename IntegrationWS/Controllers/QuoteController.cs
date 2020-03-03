@@ -88,17 +88,20 @@ namespace IntegrationWS.Controllers
                 //Agregando comentario
                 var comentario = $@"Numero de caso: {caseDTO.CaseNumber}, Serie del equipo: {caseDTO.Nmerodeserie}, Nombre del activo: {caseDTO.Nombre_del_activo},";
 
-                //Creando string para comentario en factura
-                foreach (var item in caseDTO.OrdenesConCitas)
+                if (caseDTO.OrdenesConCitas != null)
                 {
-                    comentario += $" [Orden: {item.WorkOrderNumber}";
-
-                    foreach (var item2 in item.ServiceAppointments)
+                    //Creando string para comentario en factura
+                    foreach (var item in caseDTO.OrdenesConCitas)
                     {
-                        comentario += $", (Cita: {item2.AppointmentNumber}, Recurso: {item2.Recurso_asignado__c})";
-                    }
+                        comentario += $" [Orden: {item.WorkOrderNumber}";
 
-                    comentario += "].";
+                        foreach (var item2 in item.ServiceAppointments)
+                        {
+                            comentario += $", (Cita: {item2.AppointmentNumber}, Recurso: {item2.Recurso_asignado__c})";
+                        }
+
+                        comentario += "].";
+                    }
                 }
 
                 CommentKey commentKey = new CommentKey();

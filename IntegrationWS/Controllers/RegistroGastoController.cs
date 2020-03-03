@@ -24,11 +24,23 @@ namespace IntegrationWS.Controllers
         public IHttpActionResult get([FromBody] RegistroGastoDTO registroGastoDTO)
         {
             try
-            {
-                if(registroGastoDTO == null)
+            {                
+                
+                if (registroGastoDTO == null)
                 {
                     ModelState.AddModelError("Message", "El body no debe ser nulo.");
                     return BadRequest(ModelState);
+                }
+
+                //using (BnrdDbContextToRemove db_dev = new BnrdDbContextToRemove())
+                using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
+                {
+                    var CPBFromDB = db_dev.Database.SqlQuery<string>($"EXEC VerificarExistenciaCPB '{registroGastoDTO.Name}'").FirstOrDefault();
+                    
+                    if(!string.IsNullOrEmpty(CPBFromDB))
+                    {
+                        return Content(HttpStatusCode.Created, CPBFromDB.Trim());
+                    }
                 }
 
                 Pedido pedido = new Pedido();
@@ -44,53 +56,67 @@ namespace IntegrationWS.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var client = new WSMovilDGIISoapClient();
-
-                var responseRNC = client.GetContribuyentes(registroGastoDTO.RNC__c.Trim(), 0, 0, 0, "");
-
-                if (responseRNC == "0")
+                if (!string.IsNullOrEmpty(registroGastoDTO.RNC__c))
                 {
-                    ModelState.AddModelError("Message", "El RNC no es valido");
+                    var client = new WSMovilDGIISoapClient();
+
+                    var responseRNC = client.GetContribuyentes(registroGastoDTO.RNC__c.Trim(), 0, 0, 0, "");
+
+                    if (responseRNC == "0")
+                    {
+                        ModelState.AddModelError("Message", "El RNC no es valido");
+
+                        if (client.State != CommunicationState.Faulted)
+                        {
+                            client.Close();
+                        }
+
+                        return BadRequest(ModelState);
+                    }
+
+                    var responseNCF = client.GetNCF(registroGastoDTO.RNC__c.Trim(), registroGastoDTO.NCF__c.Trim(), "");
+
+                    if (responseNCF == "0")
+                    {
+                        ModelState.AddModelError("Message", "El NCF no es valido");
+
+                        if (client.State != CommunicationState.Faulted)
+                        {
+                            client.Close();
+                        }
+
+                        return BadRequest(ModelState);
+                    }
 
                     if (client.State != CommunicationState.Faulted)
                     {
                         client.Close();
                     }
-
-                    return BadRequest(ModelState);
                 }
-
-                var responseNCF = client.GetNCF(registroGastoDTO.RNC__c.Trim(), registroGastoDTO.NCF__c.Trim(), "");
-
-                if (responseNCF == "0")
+                else
                 {
-                    ModelState.AddModelError("Message", "El NCF no es valido");
-
-                    if (client.State != CommunicationState.Faulted)
-                    {
-                        client.Close();
-                    }
-
-                    return BadRequest(ModelState);
+                    registroGastoDTO.RNC__c = "101070587";
+                    registroGastoDTO.Numero_de_factura__c = Guid.NewGuid().ToString();
                 }
 
-                if (client.State != CommunicationState.Faulted)
-                {
-                    client.Close();
-                }
+                
 
                 var caja = string.Empty;
+                string pago = string.Empty;
 
                 switch (registroGastoDTO.Departamento__c)
                 {
                     case "Ingeniería y Aplicaciones": caja = "CC02"; break;
+                    case "Tecnología de la Información": caja = "CC02"; break;
                 }
 
                 var response1 = new ResponseCreatePayableInvoice();
 
-                using (BnrdDbContextToRemove db_dev = new BnrdDbContextToRemove())
+                
+                using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                 {
                     response1 = db_dev.Database.SqlQuery<ResponseCreatePayableInvoice>($"BNRD_SP_CreatePayableInvoce '{registroGastoDTO.RNC__c}', '{caja}'").FirstOrDefault();
+                    pago = db_dev.Database.SqlQuery<string>($"BNRD_SP_CreatePayableInvocePayment").FirstOrDefault();
                 }
 
                 //Crear registro en GP
@@ -133,7 +159,14 @@ namespace IntegrationWS.Controllers
 
                 // Create a vendor key
                 vendorKey = new VendorKey();
-                vendorKey.Id = response1.PROVEEDOR.Trim(); //<-- Aquí va el vendor ID 
+
+                if (!String.IsNullOrEmpty(response1.PROVEEDOR))
+                    vendorKey.Id = response1.PROVEEDOR.Trim(); //<-- Aquí va el vendor ID 
+                else
+                {
+                    ModelState.AddModelError("Message", "El Proveedor no esta registrado.");
+                    return BadRequest(ModelState);
+                }
 
                 // Create a money amount object for the transaction
                 MoneyAmount purchaseAmount = new MoneyAmount();
@@ -179,60 +212,74 @@ namespace IntegrationWS.Controllers
 
                 //AGREGANDO IMPUESTO
                 PayablesTax[] payablesTaxs = default;
-                decimal montoTaxes = 0m;
+                decimal montoTaxes = registroGastoDTO.Monto__c;
 
-                if (registroGastoDTO.Propina_legal__c)
+                // Create a payables invoice object 
+                payablesInvoice = new PayablesInvoice();
+
+                if (!registroGastoDTO.Exento_de_ITBIS__c)
                 {
-                    purchaseAmount.Value = Math.Round(purchaseAmount.Value / 1.28m, 2);
-                    montoTaxes = registroGastoDTO.Monto__c - purchaseAmount.Value;
+                    if (registroGastoDTO.Propina_legal__c)
+                    {
+                        purchaseAmount.Value = Math.Round(purchaseAmount.Value / 1.28m, 2);
+                        montoTaxes = registroGastoDTO.Monto__c - purchaseAmount.Value;
 
-                    payablesTaxs = new PayablesTax[2];
-                    payablesTaxs[0] = new PayablesTax();
-                    TaxDetailKey taxDetailKey = new TaxDetailKey();
-                    taxDetailKey.CompanyKey = companyKey;
-                    taxDetailKey.Id = "ITBISC";
-                    PayablesTaxKey payablesTaxKey = new PayablesTaxKey();
-                    payablesTaxKey.TaxDetailKey = taxDetailKey;
-                    payablesTaxs[0].Key = payablesTaxKey;
-                    payablesTaxs[0].PurchasesTaxAmount = purchaseAmount;
-                    MoneyAmount taxAmount18 = new MoneyAmount();
-                    taxAmount18.Currency = "DOP";
-                    taxAmount18.Value = Math.Round(purchaseAmount.Value * 0.18m, 2);
-                    payablesTaxs[0].TaxAmount = taxAmount18;
+                        payablesTaxs = new PayablesTax[2];
+                        payablesTaxs[0] = new PayablesTax();
+                        TaxDetailKey taxDetailKey = new TaxDetailKey();
+                        taxDetailKey.CompanyKey = companyKey;
+                        taxDetailKey.Id = "ITBISC";
+                        PayablesTaxKey payablesTaxKey = new PayablesTaxKey();
+                        payablesTaxKey.TaxDetailKey = taxDetailKey;
+                        payablesTaxs[0].Key = payablesTaxKey;
+                        payablesTaxs[0].PurchasesTaxAmount = purchaseAmount;
+                        MoneyAmount taxAmount18 = new MoneyAmount();
+                        taxAmount18.Currency = "DOP";
+                        taxAmount18.Value = Math.Round(purchaseAmount.Value * 0.18m, 2);
+                        payablesTaxs[0].TaxAmount = taxAmount18;
 
-                    payablesTaxs[1] = new PayablesTax();
-                    TaxDetailKey taxDetailKey1 = new TaxDetailKey();
-                    taxDetailKey1.CompanyKey = companyKey;
-                    taxDetailKey1.Id = "PROP_LEGAL_C";
-                    PayablesTaxKey payablesTaxKey1 = new PayablesTaxKey();
-                    payablesTaxKey1.TaxDetailKey = taxDetailKey1;
-                    payablesTaxs[1].Key = payablesTaxKey1;
-                    payablesTaxs[1].PurchasesTaxAmount = purchaseAmount;
-                    MoneyAmount taxAmount10 = new MoneyAmount();
-                    taxAmount10.Currency = "DOP";
-                    taxAmount10.Value = montoTaxes - taxAmount18.Value;
-                    payablesTaxs[1].TaxAmount = taxAmount10;
+                        payablesTaxs[1] = new PayablesTax();
+                        TaxDetailKey taxDetailKey1 = new TaxDetailKey();
+                        taxDetailKey1.CompanyKey = companyKey;
+                        taxDetailKey1.Id = "PROP_LEGAL_C";
+                        PayablesTaxKey payablesTaxKey1 = new PayablesTaxKey();
+                        payablesTaxKey1.TaxDetailKey = taxDetailKey1;
+                        payablesTaxs[1].Key = payablesTaxKey1;
+                        payablesTaxs[1].PurchasesTaxAmount = purchaseAmount;
+                        MoneyAmount taxAmount10 = new MoneyAmount();
+                        taxAmount10.Currency = "DOP";
+                        taxAmount10.Value = montoTaxes - taxAmount18.Value;
+                        payablesTaxs[1].TaxAmount = taxAmount10;
+                    }
+                    else
+                    {
+                        purchaseAmount.Value = Math.Round(purchaseAmount.Value / 1.18m, 2);
+                        montoTaxes = registroGastoDTO.Monto__c - purchaseAmount.Value;
+                        //Math.Round(purchaseAmount.Value * 0.18m, 2);
+
+                        payablesTaxs = new PayablesTax[1];
+                        payablesTaxs[0] = new PayablesTax();
+                        TaxDetailKey taxDetailKey = new TaxDetailKey();
+                        taxDetailKey.CompanyKey = companyKey;
+                        taxDetailKey.Id = "ITBISC";
+                        PayablesTaxKey payablesTaxKey = new PayablesTaxKey();
+                        payablesTaxKey.TaxDetailKey = taxDetailKey;
+                        payablesTaxs[0].Key = payablesTaxKey;
+                        payablesTaxs[0].PurchasesTaxAmount = purchaseAmount;
+                        MoneyAmount taxAmount18 = new MoneyAmount();
+                        taxAmount18.Currency = "DOP";
+                        taxAmount18.Value = registroGastoDTO.Monto__c - purchaseAmount.Value;
+                        payablesTaxs[0].TaxAmount = taxAmount18;
+                    }
+
+                    MoneyAmount montoTaxesTotal = new MoneyAmount();
+                    montoTaxesTotal.Currency = "DOP";
+                    montoTaxesTotal.Value = montoTaxes;
+
+                    payablesInvoice.Taxes = payablesTaxs;
+                    payablesInvoice.TaxAmount = montoTaxesTotal;
                 }
-                else
-                {
-                    purchaseAmount.Value = Math.Round(purchaseAmount.Value / 1.18m, 2);
-                    montoTaxes = registroGastoDTO.Monto__c - purchaseAmount.Value;
-                    //Math.Round(purchaseAmount.Value * 0.18m, 2);
-
-                    payablesTaxs = new PayablesTax[1];
-                    payablesTaxs[0] = new PayablesTax();      
-                    TaxDetailKey taxDetailKey = new TaxDetailKey();
-                    taxDetailKey.CompanyKey = companyKey;
-                    taxDetailKey.Id = "ITBISC";
-                    PayablesTaxKey payablesTaxKey = new PayablesTaxKey();
-                    payablesTaxKey.TaxDetailKey = taxDetailKey;
-                    payablesTaxs[0].Key = payablesTaxKey;
-                    payablesTaxs[0].PurchasesTaxAmount = purchaseAmount;
-                    MoneyAmount taxAmount18 = new MoneyAmount();
-                    taxAmount18.Currency = "DOP";
-                    taxAmount18.Value = registroGastoDTO.Monto__c - purchaseAmount.Value;
-                    payablesTaxs[0].TaxAmount = taxAmount18;
-                }
+                
 
 
                 //CREANDO PAGO
@@ -244,7 +291,7 @@ namespace IntegrationWS.Controllers
                 payablesCashDetail.DocumentId = "EFECTIVO";
                 payablesCashDetail.Amount = MontoNeto;
                 payablesCashDetail.Date = registroGastoDTO.Fecha_de_consumo__c;
-                payablesCashDetail.Number = "PAG172275";
+                payablesCashDetail.Number = pago.Trim();
 
                 BankAccountKey bankAccountKey = new BankAccountKey();
                 bankAccountKey.CompanyKey = companyKey;
@@ -252,31 +299,27 @@ namespace IntegrationWS.Controllers
 
                 payablesCashDetail.BankAccountKey = bankAccountKey;
 
-                MoneyAmount montoTaxesTotal = new MoneyAmount();
-                montoTaxesTotal.Currency = "DOP";
-                montoTaxesTotal.Value = montoTaxes;
+                
 
                 PayablesPayment payablesPayment = new PayablesPayment();
                 payablesPayment.Cash = payablesCashDetail;
 
-                // Create a payables invoice object      
-                payablesInvoice = new PayablesInvoice();
+                // Create a payables invoice object                     
                 payablesInvoice.Key = invoiceKey;
                 payablesInvoice.BatchKey = batchKey;
                 payablesInvoice.VendorKey = vendorKey;
                 payablesInvoice.VendorDocumentNumber = registroGastoDTO.Numero_de_factura__c; //<-- Aqui el numero de Factura
-                payablesInvoice.PurchasesAmount = purchaseAmount;
-                payablesInvoice.TaxAmount = montoTaxesTotal;
-                payablesInvoice.Date = registroGastoDTO.Fecha_de_consumo__c;
-                payablesInvoice.Taxes = payablesTaxs;
+                payablesInvoice.PurchasesAmount = purchaseAmount;                
+                payablesInvoice.Date = registroGastoDTO.Fecha_de_consumo__c;                
                 payablesInvoice.Payment = payablesPayment;
+                payablesInvoice.Description = registroGastoDTO.Descripci_n__c;
 
                 //payablesInvoice.Distributions = distributions;
 
                 //Policy
                 payablesInvoiceCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreatePayablesInvoice", context);
 
-                // Create the sales order
+                //Create the sales order
                 wsDynamicsGP.CreatePayablesInvoice(payablesInvoice, context, payablesInvoiceCreatePolicy);
 
                 // Close the service
@@ -284,16 +327,16 @@ namespace IntegrationWS.Controllers
                 {
                     wsDynamicsGP.Close();
                 }
-                
-                using (BnrdDbContextToRemove db_dev = new BnrdDbContextToRemove())
+
+                using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                 {
                     var fecha = registroGastoDTO.Fecha_de_consumo__c.ToString("yyyy.MM.dd");
-                    var TipoGastoNCF = registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim();
-                    //db_dev.Database.ExecuteSqlCommand($"BNRD_SP_CreatePayableInvocePayment '{CPB}', {registroGastoDTO.Monto__c}, '{fecha}', '{TipoGastoNCF}'");
-                    db_dev.Database.ExecuteSqlCommand($"BNRD_SP_RegistrarNCFaCPB '{response1.PROVEEDOR}', '{registroGastoDTO.Numero_de_factura__c}', '{registroGastoDTO.NCF__c}', '{registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim()}'");
+                    var TipoGastoNCF = registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim();                  
+                    db_dev.Database.ExecuteSqlCommand($"BNRD_SP_RegistrarNCFaCPB '{response1.PROVEEDOR}', '{registroGastoDTO.Numero_de_factura__c}', '{registroGastoDTO.NCF__c}', '{registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim()}', '{CPB}', '{registroGastoDTO.Divisi_n__c}'");
                 }
 
-                return Content(HttpStatusCode.Created, invoiceKey.Id);
+                string CPB_LOTE = invoiceKey.Id + ',' + batchKey.Id;
+                return Content(HttpStatusCode.Created, CPB_LOTE);
             }
             catch(Exception e)
             {

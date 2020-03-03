@@ -25,5 +25,7 @@ namespace IntegrationWS.Models
         public int HasChanged { get; set; }
 
         public DateTime DateOfChanged { get; set; }
+
+        public bool Error { get; set; }
     }
 }

@@ -118,9 +118,17 @@ namespace IntegrationWS.Utils
 
                     using (ApplicationDbContext Db = new ApplicationDbContext())
                     {
-                        general_Audit_list = Db_Dev.General_Audit.ToList();
+                        general_Audit_list = Db_Dev.General_Audit.Where(x => x.Error == false).ToList();
+                        //general_Audit_list.Add(new General_Audit() { 
+                        //    TableName = "SOP30200",
+                        //    DynamicsId = "FAC325307",
+                        //    Activity = "UPDATE",
+                        //    DoneBy = "wburgos",
+                        //    HasChanged = 1,
+                        //    DateOfChanged =  DateTime.Now
+                        //});
 
-                        if (general_Audit_list.Count() != 0 && authToken == string.Empty)
+                        if (general_Audit_list.Count() != 0 && string.IsNullOrEmpty(authToken))
                         {
                             loginResult = await _authToSalesforce.Login();
 
@@ -487,6 +495,7 @@ namespace IntegrationWS.Utils
                                     {
                                         Oportunidad oportunidad = new Oportunidad();
                                         oportunidad.DynamicsId = Db.Oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        oportunidad.SalesforceId = Db.Oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.SalesforceId).FirstOrDefault();
 
                                         if (oportunidad.DynamicsId == null)
                                         {
@@ -503,30 +512,33 @@ namespace IntegrationWS.Utils
                                                 Db_Dev.General_Audit_History.Add(general_Audit_History);
                                                 Db_Dev.SaveChanges();
                                                 continue;
-                                            }
-
-                                            if (!salesforceId.Contains("errorCode"))
-                                            {
-                                                JObject obj2 = JObject.Parse(salesforceId);
-                                                salesforceId = (string)obj2["id"];
-                                                oportunidad.SalesforceId = salesforceId;
-                                                oportunidad.DynamicsId = general_Audit.DynamicsId;
-                                                Db.Oportunidad.Add(oportunidad);
-                                                Db.SaveChanges();
-                                            }
-
-                                            else
+                                            }else if (salesforceId.Contains("errorCode"))
                                             {
                                                 throw new Exception(salesforceId);
                                             }
                                         }
                                         else if (oportunidad.DynamicsId != null)
                                         {
-                                            var salesforceResponse = await _oportunidades.update(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+                                            var salesforceResponse = await _oportunidades.update(general_Audit.DynamicsId, loginResult, authToken, serviceURL, oportunidad.SalesforceId);
 
                                             if (salesforceResponse != "Ok")
                                             {
-                                                throw new Exception(salesforceResponse);
+                                                JArray jsonArray = JArray.Parse(salesforceResponse);
+                                                salesforceResponse = jsonArray[0].ToString();
+                                                JObject obj3 = JObject.Parse(salesforceResponse);
+                                                salesforceResponse = (string)obj3["errorCode"];
+
+                                                if (salesforceResponse == "ENTITY_IS_DELETED")
+                                                {
+                                                    var opo = Db.Oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                                    Db.Oportunidad.Remove(opo);
+                                                    Db.SaveChanges();
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception(salesforceResponse);
+                                                }
                                             }
                                         }
 
@@ -536,7 +548,7 @@ namespace IntegrationWS.Utils
                                         var objectFromDb = Db.Oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
                                         var salesforceResponse = await _oportunidades.delete(loginResult, objectFromDb.SalesforceId);
                                         if (salesforceResponse == "Ok")
-                                        {
+                                        {                                            
                                             Db.Oportunidad.Remove(objectFromDb);
                                             Db.SaveChanges();
                                         }
@@ -1065,9 +1077,21 @@ namespace IntegrationWS.Utils
                                     }
                                     else if (general_Audit.Activity == "DELETE")
                                     {
+
                                         var objectFromDb = Db.DocumentoAbierto.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
-                                        var salesforceResponse = await _documentoAbierto.delete(loginResult, objectFromDb.SalesforceId);
-                                        if (salesforceResponse == "Ok")
+
+                                        string salesforceResponse = default;
+
+                                        if (objectFromDb == null)
+                                        {
+                                            salesforceResponse = await _documentoAbierto.delete(loginResult, general_Audit.DynamicsId);
+                                        }
+                                        else
+                                        {
+                                            salesforceResponse = await _documentoAbierto.delete(loginResult, objectFromDb.SalesforceId);
+                                        }
+
+                                        if (salesforceResponse == "Ok" && objectFromDb != null)
                                         {
                                             Db.DocumentoAbierto.Remove(objectFromDb);
                                             Db.SaveChanges();
@@ -1108,6 +1132,13 @@ namespace IntegrationWS.Utils
 
                                 string errorMsj = string.Empty;
 
+                                var result = Db_Dev.General_Audit.FirstOrDefault(x => x.Id == general_Audit.Id);
+                                if (result != null)
+                                {
+                                    result.Error = true;
+                                    Db_Dev.SaveChanges();
+                                }
+
                                 try
                                 {
                                     errorMsj = e.Message.ToString();
@@ -1145,12 +1176,13 @@ namespace IntegrationWS.Utils
                                     Db.ErrorLogs.Add(error);
                                     Db.SaveChanges();
                                 }
-                                else if (errorMsj == "ENTITY_IS_DELETED")
+                                else if (errorMsj == "ENTITY_IS_DELETED" && general_Audit.Activity == "DELETE")
                                 {
                                     Db_Dev.General_Audit.Remove(general_Audit);
                                     Db_Dev.SaveChanges();
                                     continue;
                                 }
+
                             }
                         }
                     }     

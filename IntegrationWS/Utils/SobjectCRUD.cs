@@ -180,6 +180,12 @@ namespace IntegrationWS.Utils
 
                     JObject obj2 = JObject.Parse(result);
                     var records =  obj2["records"];
+                    var totalSize = obj2["totalSize"];
+
+                    if(totalSize.Value<string>() == "0")
+                    {
+                        return "";
+                    }
                     result = records[0].Value<string>("Id");
                 }
 

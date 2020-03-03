@@ -30,7 +30,7 @@ namespace IntegrationWS.ModelsNotMapped
         public decimal Monto_disponible__c { get; set; }
         public int Dias_de_retraso__c { get; set; }
         public string OwnerId { get; set; }
-        public string Lista_de_precios__c { get; set; }
+        public string Listas_de_precios__c { get; set; }
         public string RNC__c { get; set; }
         public string Region__c { get; set; }
         public string Cuenta_desactivada__c { get; set; }

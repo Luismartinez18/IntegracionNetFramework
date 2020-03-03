@@ -817,7 +817,9 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\BulkApiController.cs" />
+    <Compile Include="Controllers\ComisionMedicaController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RegistroGastoController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\QuoteController.cs" />
@@ -828,7 +830,10 @@
     <Compile Include="Data\BnrdDbContextToRemove.cs" />
     <Compile Include="Data\DevelopmentDbContext.cs" />
     <Compile Include="DTOs\CaseDTO.cs" />
+    <Compile Include="DTOs\ComisionMedicaDTO.cs" />
     <Compile Include="DTOs\LeadDTO.cs" />
+    <Compile Include="DTOs\OpportunitiesDTO.cs" />
+    <Compile Include="DTOs\OpportunityLineItemModel.cs" />
     <Compile Include="DTOs\RegistroGastoDTO.cs" />
     <Compile Include="DTOs\UserForLoginDTO.cs" />
     <Compile Include="DTOs\UserForRegisterDTO.cs" />
@@ -873,6 +878,10 @@
     <Compile Include="Migrations.Development\201810181309414_EliminandoTablas.cs" />
     <Compile Include="Migrations.Development\201810181309414_EliminandoTablas.Designer.cs">
       <DependentUpon>201810181309414_EliminandoTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations.Development\202002112252413_addColumnOfStatusInGeneralAudit.cs" />
+    <Compile Include="Migrations.Development\202002112252413_addColumnOfStatusInGeneralAudit.Designer.cs">
+      <DependentUpon>202002112252413_addColumnOfStatusInGeneralAudit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations.Development\Configuration.cs" />
     <Compile Include="Migrations\201810151436049_IniciandoProyecto.cs" />
@@ -974,7 +983,6 @@
     <Compile Include="ModelsNotMapped\OpportunityLineItem.cs" />
     <Compile Include="ModelsNotMapped\OpportunitySplit.cs" />
     <Compile Include="ModelsNotMapped\OpportunityTeamMember.cs" />
-    <Compile Include="ModelsNotMapped\OpportunityToUpdate.cs" />
     <Compile Include="ModelsNotMapped\OpportunitySf.cs" />
     <Compile Include="ModelsNotMapped\ordenConCita.cs" />
     <Compile Include="ModelsNotMapped\Pricebook2.cs" />
@@ -1046,6 +1054,7 @@
     <None Include="Properties\PublishProfiles\Default Settings2.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1068,6 +1077,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations.Development\201810181309414_EliminandoTablas.resx">
       <DependentUpon>201810181309414_EliminandoTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations.Development\202002112252413_addColumnOfStatusInGeneralAudit.resx">
+      <DependentUpon>202002112252413_addColumnOfStatusInGeneralAudit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810151436049_IniciandoProyecto.resx">
       <DependentUpon>201810151436049_IniciandoProyecto.cs</DependentUpon>
