@@ -199,10 +199,10 @@ namespace IntegrationWS.Integrations
                 var result2 = await _sobjectCRUD3.addSobjectAsync(loginResult, oppTeamMmbr, "OpportunityTeamMember");
             }
 
-            if(opportunitySplitList.Sum(x => x.SplitPercentage) != 100)
-            {
-                return "errorCode - La división de oportunidades no suma el 100%";
-            }
+            //if (opportunitySplitList.Sum(x => x.SplitPercentage) != 100)
+            //{
+            //    return "errorCode - La división de oportunidades no suma el 100%";
+            //}
 
             foreach (var oppDiv in opportunitySplitList)
             {
