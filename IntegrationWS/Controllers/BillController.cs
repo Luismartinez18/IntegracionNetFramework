@@ -484,10 +484,9 @@ namespace IntegrationWS.Controllers
                     return Content(HttpStatusCode.Created, respuesta.Trim());
                 }
             }
-                
             catch(Exception e)
             {
-                return Content(HttpStatusCode.BadRequest, e.Message.ToString());
+                return Content(HttpStatusCode.BadRequest, e.ToString());
             }         
         }
     }
