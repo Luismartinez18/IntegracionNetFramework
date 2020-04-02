@@ -4,6 +4,8 @@ using IntegrationWS.DynamicsGPService;
 using IntegrationWS.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -17,7 +19,7 @@ namespace IntegrationWS.Controllers
 {
     public class VendorController : ApiController
     {
-        [HttpGet(),Route("vendor/{id}")]
+        [HttpGet(), Route("vendor/{id}")]
         [AllowAnonymous]
         public IHttpActionResult Get(string id)
         {
@@ -29,7 +31,7 @@ namespace IntegrationWS.Controllers
                 context.OrganizationKey = companyKey;
                 var key = new VendorKey();
                 key.Id = id;
-                var vendor = wsDynamicsGP.GetVendorByKey(key,context);
+                var vendor = wsDynamicsGP.GetVendorByKey(key, context);
                 return Ok(vendor);
             }
         }
@@ -95,7 +97,7 @@ namespace IntegrationWS.Controllers
                         vendor.Name = vendorDTO.Name;
                     if (!string.IsNullOrEmpty(vendorDTO.ShortName))
                         vendor.ShortName = vendorDTO.ShortName;
-                    if(!string.IsNullOrEmpty(vendorDTO.CheckTitle))
+                    if (!string.IsNullOrEmpty(vendorDTO.CheckTitle))
                         vendor.CheckName = vendorDTO.CheckTitle;
                     if (!string.IsNullOrEmpty(vendorDTO.ClassId))
                     {
@@ -135,7 +137,7 @@ namespace IntegrationWS.Controllers
                         vendor.BankAccountKey.CompanyKey = companyKey;
                         vendor.BankAccountKey.Id = vendorDTO.BankAccount;
                     }
-                    if(!string.IsNullOrEmpty(vendorDTO.PaymentPriority))
+                    if (!string.IsNullOrEmpty(vendorDTO.PaymentPriority))
                         vendor.PaymentPriority = vendorDTO.PaymentPriority;
 
                     // Customer Address Key
@@ -155,6 +157,7 @@ namespace IntegrationWS.Controllers
                     vendorAddresses[0].CountryRegionCodeKey = new CountryRegionCodeKey();
                     vendorAddresses[0].CountryRegionCodeKey.Id = CountryId;
                     vendorAddresses[0].PostalCode = vendorDTO.ZipCode;
+                    vendorAddresses[0].UPSZone = vendorDTO.UpsZone;
 
                     vendorAddresses[0].Phone1 = new PhoneNumber();
                     vendorAddresses[0].Phone1.Value = vendorDTO.Phone1;
@@ -167,10 +170,22 @@ namespace IntegrationWS.Controllers
 
                     vendorAddresses[0].Fax = new PhoneNumber();
                     vendorAddresses[0].Fax.Value = vendorDTO.Fax;
-
+                    ShippingMethodKey smk = new ShippingMethodKey();
+                    smk.Id = vendorDTO.ShippingMethod;
+                    smk.CompanyKey = companyKey;
+                    vendorAddresses[0].ShippingMethodKey = smk;
                     vendorAddresses[0].ContactPerson = vendorDTO.Contact;
+                    vendor.TaxSchedule = vendorDTO.TaxPlan;
+                    vendor.TradeDiscountPercent = new Percent
+                    {
+                        DecimalDigits = 2,
+                        Value = (decimal)vendorDTO.CommercialDiscount
+                    };
                     vendor.DefaultAddressKey = vendorAddressKey;
                     vendor.Addresses = vendorAddresses;
+                    vendor.AllowRevaluation = vendorDTO.VendorRevalue;
+                    vendor.DiscountGracePeriod = vendorDTO.DiscountGracePeriod;
+                    vendor.DueDateGracePeriod = vendorDTO.ExpirationDateGracePeriod;
                     vendor.MinimumOrderAmount = new MoneyAmount();
                     vendor.MinimumOrderAmount.Currency = vendorDTO.CurrencyId;
                     vendor.MinimumOrderAmount.Value = Convert.ToDecimal(vendorDTO.MinimumOrderAmount);
@@ -180,10 +195,10 @@ namespace IntegrationWS.Controllers
                     paymentTermsKey.Id = vendorDTO.PaymentTerms;
                     vendor.PaymentTermsKey = paymentTermsKey;
                     vendor.PaymentPriority = vendorDTO.PaymentPriority;
+                    vendor.Tax1099Type = Tax1099Type.None;
                     vendor.RateTypeKey = new RateTypeKey();
                     vendor.RateTypeKey.CompanyKey = companyKey;
                     vendor.RateTypeKey.Id = vendorDTO.RateType;
-
                     // Get the create policy for the customer
                     var vendorPolicy = wsDynamicsGP.GetPolicyByOperation("CreateVendor", context);
                     //Upsert vendor
@@ -198,21 +213,42 @@ namespace IntegrationWS.Controllers
                         wsDynamicsGP.Close();
                     }
 
-                    using (var db = new DevelopmentDbContext())
+                    int opcionLimiteCredito = vendorDTO.CreditUnlimited ? 1 : vendorDTO.CreditLimit == 0 ? 0 : 2;
+                    int opcionCancelaciones = vendorDTO.CancellationsUnlimited ? 1 : vendorDTO.Cancellations == 0 ? 0 : 2;
+                    int opcionPagoMinimo = vendorDTO.MinimumPayment == 0 ? 0 : 2;
+                    bool hasInvoiceLimit = !vendorDTO.MaxBillUnlimited;
+                    using (SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DEVELOPMENT"].ConnectionString))
                     {
-                        int opcionLimiteCredito = vendorDTO.CreditUnlimited ? 1 : vendorDTO.CreditLimit == 0 ? 0 : 2;
-                        int opcionCancelaciones = vendorDTO.CancellationsUnlimited ? 1 : vendorDTO.Cancellations == 0 ? 0 : 2;
-                        var result = db.Database.SqlQuery<IntegrationResult>("EXEC INS_SF_OpcionesMaestroProveedores_BNRD @VendorId, @BancoBPD, @BancoLEON, @ClasificacionNCF, @OpcionLimiteCredito, @MontoLimiteCredito, @OpcioneCancelaciones,@MontoCancelaciones",
-                            new SqlParameter("@VendorId",vendorId), 
-                            new SqlParameter("@BancoBPD", (object)vendorDTO.BankAccountBPD??DBNull.Value),
-                            new SqlParameter("@BancoLEON", (object)vendorDTO.BankAccountBHDL??DBNull.Value), 
-                            new SqlParameter("@ClasificacionNCF", (object)vendorDTO.NCFClasification??DBNull.Value),
-                            new SqlParameter("@OpcionLimiteCredito", (object)opcionLimiteCredito??DBNull.Value),
-                            new SqlParameter("@MontoLimiteCredito", (object)vendorDTO.CreditLimit??DBNull.Value), 
-                            new SqlParameter("@OpcioneCancelaciones", (object)opcionCancelaciones??DBNull.Value),
-                            new SqlParameter("@MontoCancelaciones",(object)vendorDTO.Cancellations??DBNull.Value)).FirstOrDefault();
-                        
+                        sqlConnection.Open();
+                        using (SqlCommand sqlCommand = new SqlCommand("INS_SF_OpcionesMaestroProveedores_BNRD",sqlConnection))
+                        {
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.Parameters.AddWithValue("@VendorId", vendorId);
+                            sqlCommand.Parameters.AddWithValue("@BancoBPD", (object)vendorDTO.BankAccountBPD ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@BancoLEON", (object)vendorDTO.BankAccountBHDL ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@ClasificacionNCF", (object)vendorDTO.NCFClasification ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@OpcionLimiteCredito", (object)opcionLimiteCredito ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@MontoLimiteCredito", (object)vendorDTO.CreditLimit ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@OpcioneCancelaciones", (object)opcionCancelaciones ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@MontoCancelaciones", (object)vendorDTO.Cancellations ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@IdChequera", (object)vendorDTO.CheckBookId ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@ONEPAYPERVENDINV", (object)vendorDTO.PaymentFor ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@MinPaymentType", (object)opcionPagoMinimo ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@MinPaymentPercent", (object)0);
+                            sqlCommand.Parameters.AddWithValue("@MinPaymentAmount", (object)vendorDTO.MinimumPayment ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@HasInvoiceLimit", (object)hasInvoiceLimit ?? DBNull.Value);
+                            sqlCommand.Parameters.AddWithValue("@InvoiceLimitAmount", (object)vendorDTO.MaxBillAmount ?? DBNull.Value);
+                            using (SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand))
+                            {
+                                using(DataTable dt = new DataTable())
+                                {
+                                    adapter.Fill(dt);
+                                }
+                            }
+                        }
                     }
+
+
                     return Ok(IntegrationResult.GetSuccessResult(vendorId));
                 }
             }
