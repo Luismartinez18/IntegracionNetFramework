@@ -31,8 +31,8 @@ namespace IntegrationWS.DTOs
         public string CurrencyId { get; set; }
         public string RateType { get; set; }
         public string PaymentTerms { get; set; }
-        public string DiscountGracePeriod { get; set; }
-        public string ExpirationDateGracePeriod { get; set; }
+        public int? DiscountGracePeriod { get; set; }
+        public int? ExpirationDateGracePeriod { get; set; }
         public string PaymentPriority { get; set; }
         public double MinimumOrderAmount {get; set; }
         public double CommercialDiscount { get; set; }
@@ -48,7 +48,8 @@ namespace IntegrationWS.DTOs
         public bool CreditUnlimited { get; set; }
         public decimal Cancellations { get; set; }
         public bool CancellationsUnlimited { get; set; }
-        public string VendorRevalue { get; set; }
+        public bool? VendorRevalue { get; set; }
         public string DynamicId { get; set; }
+        public string UpsZone { get; set; }
     }
 }
