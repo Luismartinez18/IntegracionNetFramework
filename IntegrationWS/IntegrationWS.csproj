@@ -819,6 +819,7 @@
     <Compile Include="Controllers\BulkApiController.cs" />
     <Compile Include="Controllers\ComisionMedicaController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\OpportunityToQuoteController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RegistroGastoController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
@@ -835,6 +836,7 @@
     <Compile Include="DTOs\LeadDTO.cs" />
     <Compile Include="DTOs\OpportunitiesDTO.cs" />
     <Compile Include="DTOs\OpportunityLineItemModel.cs" />
+    <Compile Include="DTOs\PresupuestoDTO.cs" />
     <Compile Include="DTOs\RegistroGastoDTO.cs" />
     <Compile Include="DTOs\UserForLoginDTO.cs" />
     <Compile Include="DTOs\UserForRegisterDTO.cs" />
@@ -987,6 +989,7 @@
     <Compile Include="ModelsNotMapped\OpportunityTeamMember.cs" />
     <Compile Include="ModelsNotMapped\OpportunitySf.cs" />
     <Compile Include="ModelsNotMapped\ordenConCita.cs" />
+    <Compile Include="ModelsNotMapped\presupuesto_producto.cs" />
     <Compile Include="ModelsNotMapped\Pricebook2.cs" />
     <Compile Include="ModelsNotMapped\PricebookEntry.cs" />
     <Compile Include="ModelsNotMapped\PricebookEntryToDelete.cs" />

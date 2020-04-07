@@ -159,6 +159,8 @@ namespace IntegrationWS.Integrations
             using (BnrdDbContext db_bnrd = new BnrdDbContext())
             {
                 productItemFromDb = db_bnrd.Database.SqlQuery<ProductItemInDynamics>($"SELECT ITEMNMBR, (QTYONHND - ATYALLOC) AS 'QTYONHND' FROM IV00102 WHERE ITEMNMBR = '{item}' AND LOCNCODE = '{ubicacion}'").FirstOrDefault();
+                if (productItemFromDb == null)
+                    return productItem;
                 productItemFromDb.BASEUOFM = db_bnrd.Database.SqlQuery<string>($"select BASEUOFM from IV40201 where UOMSCHDL = (select UOMSCHDL from IV00101 where ITEMNMBR = '{item}')").FirstOrDefault();
             }
 
