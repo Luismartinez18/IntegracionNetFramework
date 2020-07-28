@@ -20,5 +20,6 @@ namespace IntegrationWS.ModelsNotMapped
         public string Tipo__c { get; set; }
         public decimal Tests_Dosis__c { get; set; }
         public string Opciones_de_impuestos__c { get; set; }
+        public string TipoProducto__c { get; set; }
     }
 }

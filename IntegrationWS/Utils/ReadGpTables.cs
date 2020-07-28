@@ -1261,7 +1261,7 @@ namespace IntegrationWS.Utils
                 using (ApplicationDbContext Db = new ApplicationDbContext())
                 {
                     ErrorLogs error = new ErrorLogs();
-                    error.Error = e.Message;
+                    error.Error = e.ToString();
                     error.FechaDelError = DateTime.Now;
                     Db.ErrorLogs.Add(error);
                     Db.SaveChanges();

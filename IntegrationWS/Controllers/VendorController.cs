@@ -19,22 +19,6 @@ namespace IntegrationWS.Controllers
 {
     public class VendorController : ApiController
     {
-        [HttpGet(), Route("vendor/{id}")]
-        [AllowAnonymous]
-        public IHttpActionResult Get(string id)
-        {
-            using (DynamicsGPClient wsDynamicsGP = new DynamicsGPClient())
-            {
-                CompanyKey companyKey = new CompanyKey();
-                Context context = new Context();
-                companyKey.Id = 1;
-                context.OrganizationKey = companyKey;
-                var key = new VendorKey();
-                key.Id = id;
-                var vendor = wsDynamicsGP.GetVendorByKey(key, context);
-                return Ok(vendor);
-            }
-        }
         [HttpPost]
         [Authorize]
         public IHttpActionResult Post([FromBody] VendorDTO vendorDTO)
