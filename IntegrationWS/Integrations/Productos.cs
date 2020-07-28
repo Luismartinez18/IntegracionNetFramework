@@ -159,7 +159,8 @@ namespace IntegrationWS.Integrations
             itemKey = new ItemKey();
             itemKey.Id = Id;
 
-            item = wsDynamicsGP.GetItemByKey(itemKey, context);          
+            item = wsDynamicsGP.GetItemByKey(itemKey, context);
+            
             
             // Close the service 
             if (wsDynamicsGP.State != CommunicationState.Faulted)
@@ -179,6 +180,7 @@ namespace IntegrationWS.Integrations
                 product.Origen__c = item.UserCategoryList5;
                 product.IsActive = true;
                 product.Cost__c = item.CurrentCost.Value;
+                product.TipoProducto__c = ((int)item.Type).ToString();
                 product.Description = item.Description;
                 switch (item.SalesTaxBasis.Value.ToString().Trim().ToLower())
                 {
