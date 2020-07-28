@@ -357,87 +357,90 @@ namespace IntegrationWS.Controllers
                         }
                     }
 
-                    foreach(var cargoAdicional in caseDTO.CargosAdicionales)
+                    if(caseDTO.CargosAdicionales != null)
                     {
-                        SalesInvoiceLine salesOrderLine = new SalesInvoiceLine();
+                        foreach (var cargoAdicional in caseDTO.CargosAdicionales)
+                        {
+                            SalesInvoiceLine salesOrderLine = new SalesInvoiceLine();
 
-                        // Create an item key
-                        orderedItem = new ItemKey();
-                        orderedItem.Id = cargoAdicional.Codigo;
+                            // Create an item key
+                            orderedItem = new ItemKey();
+                            orderedItem.Id = cargoAdicional.Codigo;
 
-                        // Set the item key property of the sales order line object
-                        salesOrderLine.ItemKey = orderedItem;
+                            // Set the item key property of the sales order line object
+                            salesOrderLine.ItemKey = orderedItem;
 
-                        salesOrderLine.Key = new SalesLineKey();
+                            salesOrderLine.Key = new SalesLineKey();
 
-                        salesOrderLine.Key.LineSequenceNumber = 16384 * cont;
+                            salesOrderLine.Key.LineSequenceNumber = 16384 * cont;
 
-                        // Create a sales order quantity object
-                        orderedAmount = new Quantity();
-                        orderedAmount.Value = cargoAdicional.Cantidad;
+                            // Create a sales order quantity object
+                            orderedAmount = new Quantity();
+                            orderedAmount.Value = cargoAdicional.Cantidad;
 
-                        // Set the quantity of the sales order line object
-                        salesOrderLine.Quantity = orderedAmount;
+                            // Set the quantity of the sales order line object
+                            salesOrderLine.Quantity = orderedAmount;
 
-                        WarehouseKey whKey = new WarehouseKey();
-                        whKey.Id = "PRINCIPAL";
-                        whKey.CompanyKey = companyKey;
-                        salesOrderLine.WarehouseKey = whKey;
-                        salesOrderLine.UofM = "UND";
+                            WarehouseKey whKey = new WarehouseKey();
+                            whKey.Id = "PRINCIPAL";
+                            whKey.CompanyKey = companyKey;
+                            salesOrderLine.WarehouseKey = whKey;
+                            salesOrderLine.UofM = "UND";
 
-                        decimal? monto;
+                            decimal? monto;
 
-                        if (cargoAdicional.Codigo != "serv000025" && cargoAdicional.Codigo != "serv000013")
-                        {                         
-                            using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
+                            if (cargoAdicional.Codigo != "serv000025" && cargoAdicional.Codigo != "serv000013")
                             {
-                                monto = db_dev.Database.SqlQuery<decimal?>($"BuscarPrecioEnListaAsignada '{caseDTO.NumeroDeLaCuenta}', '{cargoAdicional.Codigo}', 'UND', {cargoAdicional.Cantidad}").FirstOrDefault();
-
-                                if (monto != null)
+                                using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                                 {
-                                    salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)monto };
+                                    monto = db_dev.Database.SqlQuery<decimal?>($"BuscarPrecioEnListaAsignada '{caseDTO.NumeroDeLaCuenta}', '{cargoAdicional.Codigo}', 'UND', {cargoAdicional.Cantidad}").FirstOrDefault();
 
+                                    if (monto != null)
+                                    {
+                                        salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)monto };
+
+                                    }
+                                    else if (monto == null)
+                                    {
+                                        throw new Exception($"El cargo adicional {cargoAdicional.Codigo} no tiene precio asignado.");
+                                    }
                                 }
-                                else if (monto == null)
-                                {
-                                    throw new Exception($"El cargo adicional {cargoAdicional.Codigo} no tiene precio asignado.");
-                                }
+                                //PricebookEntry pricebookEntry = new PricebookEntry();
+
+                                //using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
+                                //{
+                                //    pricebookEntry = db_dev.Database.SqlQuery<PricebookEntry>($"SP_GPSalesforce_Integracion_PricebookEntry_V2 'LISTA_', '{cargoAdicional.Codigo}'").FirstOrDefault();
+
+                                //    if (pricebookEntry.UnitPrice != null)
+                                //    {
+                                //        salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)pricebookEntry.UnitPrice };
+                                //    }
+                                //}
                             }
-                            //PricebookEntry pricebookEntry = new PricebookEntry();
 
-                            //using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
-                            //{
-                            //    pricebookEntry = db_dev.Database.SqlQuery<PricebookEntry>($"SP_GPSalesforce_Integracion_PricebookEntry_V2 'LISTA_', '{cargoAdicional.Codigo}'").FirstOrDefault();
+                            //Cargo de viaje
+                            if (cargoAdicional.Codigo == "serv000025")
+                            {
+                                salesOrderLine.UnitPrice = new MoneyAmount { Value = cargoAdicional.PrecioUnitario };
+                            }
 
-                            //    if (pricebookEntry.UnitPrice != null)
-                            //    {
-                            //        salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)pricebookEntry.UnitPrice };
-                            //    }
-                            //}
-                        }                        
+                            //Productos no inventariados.
+                            if (cargoAdicional.Codigo == "serv000013")
+                            {
+                                salesOrderLine.UnitPrice = new MoneyAmount { Value = cargoAdicional.PrecioUnitario };
+                                salesOrderLine.ItemDescription = cargoAdicional.Descripcion;
+                            }
 
-                        //Cargo de viaje
-                        if (cargoAdicional.Codigo == "serv000025")
-                        {
-                            salesOrderLine.UnitPrice = new MoneyAmount { Value = cargoAdicional.PrecioUnitario };
+                            //Aquí aplico los descuentos
+                            if (cargoAdicional.Descuento > 0)
+                            {
+                                salesOrderLine.Discount = new MoneyPercentChoice() { Item = new Percent() { Value = cargoAdicional.Descuento } };
+                            }
+
+                            orders.Add(salesOrderLine);
+
+                            cont++;
                         }
-
-                        //Productos no inventariados.
-                        if(cargoAdicional.Codigo == "serv000013")
-                        {
-                            salesOrderLine.UnitPrice = new MoneyAmount { Value = cargoAdicional.PrecioUnitario };
-                            salesOrderLine.ItemDescription = cargoAdicional.Descripcion;
-                        }
-
-                        //Aquí aplico los descuentos
-                        if (cargoAdicional.Descuento > 0)
-                        {
-                            salesOrderLine.Discount = new MoneyPercentChoice() { Item = new Percent() { Value = cargoAdicional.Descuento } };
-                        }
-
-                        orders.Add(salesOrderLine);
-
-                        cont++;
                     }
 
                     //Agregando el almacen a la cabecera
