@@ -199,17 +199,32 @@ namespace IntegrationWS.Utils
                                     else if (general_Audit.Activity == "DELETE")
                                     {
                                         var objectFromDb = Db.Productos.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
-                                        var salesforceResponse = await _productos.delete(loginResult, objectFromDb.SalesforceId, general_Audit.DynamicsId);
-                                        if (salesforceResponse == "Ok")
-                                        {
-                                            Db.Productos.Remove(objectFromDb);
-                                            Db.SaveChanges();
-                                        }
 
-                                        if (salesforceResponse != "Ok")
+                                        if (objectFromDb != null)
                                         {
-                                            throw new Exception(salesforceResponse);
+                                            var salesforceResponse = await _productos.delete(loginResult, objectFromDb.SalesforceId, general_Audit.DynamicsId);
+                                            if (salesforceResponse == "Ok")
+                                            {
+                                                Db.Productos.Remove(objectFromDb);
+                                                Db.SaveChanges();
+                                            }
+
+                                            if (salesforceResponse != "Ok")
+                                            {
+                                                throw new Exception(salesforceResponse);
+                                            }
                                         }
+                                        else {
+                                            Db_Dev.General_Audit.Remove(general_Audit);
+                                            general_Audit_History.TableName = general_Audit.TableName;
+                                            general_Audit_History.DynamicsId = general_Audit.DynamicsId;
+                                            general_Audit_History.Activity = general_Audit.Activity;
+                                            general_Audit_History.DoneBy = general_Audit.DoneBy;
+                                            general_Audit_History.DateOfChanged = general_Audit.DateOfChanged;
+                                            Db_Dev.General_Audit_History.Add(general_Audit_History);
+                                            Db_Dev.SaveChanges();
+                                        }
+                                        
                                     }
                                 }
 
@@ -288,6 +303,17 @@ namespace IntegrationWS.Utils
                                     {
                                         ArticuloProducto articuloProducto = new ArticuloProducto();
                                         articuloProducto = Db.ArticuloProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+
+                                        if(articuloProducto != null)
+                                        {
+                                            if ((articuloProducto.SalesforceId == null || articuloProducto.SalesforceId == "") && articuloProducto.DynamicsId != null)
+                                            {
+                                                Db.ArticuloProducto.Remove(articuloProducto);
+                                                Db.SaveChanges();
+
+                                                articuloProducto = Db.ArticuloProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                            }
+                                        }
 
                                         if (articuloProducto == null)
                                         {
@@ -567,6 +593,17 @@ namespace IntegrationWS.Utils
                                     {
                                         TransferenciaProducto transferencia = new TransferenciaProducto();
                                         transferencia.DynamicsId = Db.TransferenciaProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        transferencia.SalesforceId = Db.TransferenciaProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.SalesforceId).FirstOrDefault();
+
+                                        if ((transferencia.SalesforceId == null || transferencia.SalesforceId == "") && transferencia.DynamicsId != null)
+                                        {
+                                            TransferenciaProducto transferenciaDelete = new TransferenciaProducto();
+                                            transferenciaDelete.Id = Db.TransferenciaProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.Id).FirstOrDefault();
+
+                                            Db.Database.ExecuteSqlCommand($"SP_DeleteTransferenciaProducto '{transferenciaDelete.Id}'");
+
+                                            transferencia.DynamicsId = Db.TransferenciaProducto.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        }
 
                                         if (transferencia.DynamicsId == null)
                                         {
