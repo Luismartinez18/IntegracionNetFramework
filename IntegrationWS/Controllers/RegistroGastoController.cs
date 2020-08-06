@@ -340,7 +340,7 @@ namespace IntegrationWS.Controllers
             }
             catch(Exception e)
             {
-                ModelState.AddModelError("Message", e.Message.ToString());
+                ModelState.AddModelError("Message", e.ToString());
                 return BadRequest(ModelState);
             }           
         }
