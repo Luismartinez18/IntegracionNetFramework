@@ -108,6 +108,8 @@ namespace IntegrationWS.Integrations
         public async Task<string> update(string Id, string loginResult, string authToken, string serviceURL, string salesforceId)
         {
             PricebookEntry pricebookEntry = getOne(Id);
+            if(pricebookEntry!=null)
+                pricebookEntry.CurrencyIsoCode = null;
 
             if(string.IsNullOrEmpty(salesforceId))
             {                
