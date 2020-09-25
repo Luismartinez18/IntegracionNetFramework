@@ -27,6 +27,7 @@ namespace IntegrationWS.Utils
         private readonly ICuentas _cuentas;
         //private readonly ISobjectCRUD<ProductTransfer> _sobjectCRUD;
         private readonly IOportunidades _oportunidades;
+        private readonly IContratos _contratos;
         private readonly IEntradaDelCatalogoDePrecios _entradaDelCatalogo;
         private readonly IListaDePrecios _listaDePrecios;
         private readonly IProductoDeOportunidad _productoDeOportunidad;
@@ -57,7 +58,8 @@ namespace IntegrationWS.Utils
                               IActivos activos,
                               IExcepcionesFEFO excepcionesFEFO,
                               IExcepcionesFEFODetalle excepcionesFEFODetalle,
-                              IDocumentoAbierto documentoAbierto)
+                              IDocumentoAbierto documentoAbierto,
+                              IContratos contratos)
         {
             _productos = productos;
             _articulosProductos = articulosProductos;
@@ -75,6 +77,7 @@ namespace IntegrationWS.Utils
             _excepcionesFEFO = excepcionesFEFO;
             _excepcionesFEFODetalle = excepcionesFEFODetalle;
             _documentoAbierto = documentoAbierto;
+            _contratos = contratos;
         }
         public async Task Run()
         {
@@ -1141,6 +1144,78 @@ namespace IntegrationWS.Utils
                                     }
                                 }
 
+                                //Contrato
+                                if (general_Audit.TableName == "SVC00600") 
+                                {
+                                    if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                    {
+                                        Contrato contrato = new Contrato();
+                                        contrato.DynamicsId = Db.Contrato.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        contrato.SalesforceId = Db.Contrato.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.SalesforceId).FirstOrDefault();
+
+                                        if (contrato.DynamicsId == null)
+                                        {
+                                            var salesforceId = await _contratos.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceId == "actualizado")
+                                            {
+                                                Db_Dev.General_Audit.Remove(general_Audit);
+                                                general_Audit_History.TableName = general_Audit.TableName;
+                                                general_Audit_History.DynamicsId = general_Audit.DynamicsId;
+                                                general_Audit_History.Activity = general_Audit.Activity;
+                                                general_Audit_History.DoneBy = general_Audit.DoneBy;
+                                                general_Audit_History.DateOfChanged = general_Audit.DateOfChanged;
+                                                Db_Dev.General_Audit_History.Add(general_Audit_History);
+                                                Db_Dev.SaveChanges();
+                                                continue;
+                                            }
+                                            else if (salesforceId.Contains("errorCode"))
+                                            {
+                                                throw new Exception(salesforceId);
+                                            }
+                                        }
+                                        else if (contrato.DynamicsId != null)
+                                        {
+                                            var salesforceResponse = await _contratos.update(general_Audit.DynamicsId, loginResult, authToken, serviceURL, contrato.SalesforceId);
+
+                                            if (salesforceResponse != "Ok")
+                                            {
+                                                JArray jsonArray = JArray.Parse(salesforceResponse);
+                                                salesforceResponse = jsonArray[0].ToString();
+                                                JObject obj3 = JObject.Parse(salesforceResponse);
+                                                salesforceResponse = (string)obj3["errorCode"];
+
+                                                if (salesforceResponse == "ENTITY_IS_DELETED")
+                                                {
+                                                    var contr = Db.Contrato.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                                    Db.Contrato.Remove(contr);
+                                                    Db.SaveChanges();
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception(salesforceResponse);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    else if (general_Audit.Activity == "DELETE")
+                                    {
+                                        var objectFromDb = Db.Contrato.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                        var salesforceResponse = await _contratos.delete(loginResult, objectFromDb.SalesforceId);
+                                        if (salesforceResponse == "Ok")
+                                        {
+                                            Db.Contrato.Remove(objectFromDb);
+                                            Db.SaveChanges();
+                                        }
+
+                                        if (salesforceResponse != "Ok")
+                                        {
+                                            throw new Exception(salesforceResponse);
+                                        }
+                                    }
+                                }
 
                                 Db_Dev.General_Audit.Remove(general_Audit);
                                 general_Audit_History.TableName = general_Audit.TableName;

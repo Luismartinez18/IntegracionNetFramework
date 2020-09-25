@@ -857,6 +857,7 @@
     <Compile Include="Integrations\Interfaces\IExcepcionesFEFO.cs" />
     <Compile Include="Integrations\Interfaces\IExcepcionesFEFODetalle.cs" />
     <Compile Include="Integrations\Interfaces\IListaDePrecios.cs" />
+    <Compile Include="Integrations\Interfaces\IContratos.cs" />
     <Compile Include="Integrations\Interfaces\IOportunidades.cs" />
     <Compile Include="Integrations\Interfaces\IProductoConLoteUtils.cs" />
     <Compile Include="Integrations\Interfaces\IProductoDeOportunidad.cs" />
@@ -864,6 +865,7 @@
     <Compile Include="Integrations\Interfaces\ITransferenciasProductos.cs" />
     <Compile Include="Integrations\Interfaces\IUbicaciones.cs" />
     <Compile Include="Integrations\ListaDePrecios.cs" />
+    <Compile Include="Integrations\Contratos.cs" />
     <Compile Include="Integrations\Oportunidades.cs" />
     <Compile Include="Integrations\ProductoConLoteUtils.cs" />
     <Compile Include="Integrations\ProductoDeOportunidad.cs" />
@@ -972,6 +974,10 @@
     <Compile Include="Migrations\201903262005027_AgregandoTablaDocumentoAbierto.Designer.cs">
       <DependentUpon>201903262005027_AgregandoTablaDocumentoAbierto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202009241451527_AgregandoTablaDeContrato.cs" />
+    <Compile Include="Migrations\202009241451527_AgregandoTablaDeContrato.Designer.cs">
+      <DependentUpon>202009241451527_AgregandoTablaDeContrato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelsNotMapped\AccountSf.cs" />
     <Compile Include="ModelsNotMapped\AccountTeamMember.cs" />
@@ -985,6 +991,7 @@
     <Compile Include="ModelsNotMapped\Excepci_n_FEFO__c.cs" />
     <Compile Include="ModelsNotMapped\LocationSf.cs" />
     <Compile Include="ModelsNotMapped\OpportunityLineItem.cs" />
+    <Compile Include="ModelsNotMapped\ContractSf.cs" />
     <Compile Include="ModelsNotMapped\OpportunitySplit.cs" />
     <Compile Include="ModelsNotMapped\OpportunityTeamMember.cs" />
     <Compile Include="ModelsNotMapped\OpportunitySf.cs" />
@@ -1022,6 +1029,7 @@
     <Compile Include="Models\General_Audit_History.cs" />
     <Compile Include="Models\IntegrationResult.cs" />
     <Compile Include="Models\LIsta_De_Precios.cs" />
+    <Compile Include="Models\Contrato.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Producto.cs" />
@@ -1149,6 +1157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903262005027_AgregandoTablaDocumentoAbierto.resx">
       <DependentUpon>201903262005027_AgregandoTablaDocumentoAbierto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009241451527_AgregandoTablaDeContrato.resx">
+      <DependentUpon>202009241451527_AgregandoTablaDeContrato.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@ namespace IntegrationWS
             container.RegisterType<IArticulosProductos, ArticulosProductos>();
             container.RegisterType<ICuentas, Cuentas>();
             container.RegisterType<IOportunidades, Oportunidades>();
+            container.RegisterType<IContratos, Contratos>();
             container.RegisterType<IReadGpTables, ReadGpTables>();
             container.RegisterType<IAuthRepository, AuthRepository>();
             container.RegisterType<IEntradaDelCatalogoDePrecios, EntradaDelCatalogoDePrecios>();
