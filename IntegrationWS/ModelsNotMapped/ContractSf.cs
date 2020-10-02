@@ -18,6 +18,8 @@ namespace IntegrationWS.ModelsNotMapped
         public string Tipo_de_contrato__c { get; set; }
         public string Tipo_de_servicio__c { get; set; }
         public string RecordTypeId { get; set; }
+        public string Contrato_de_origen__c { get; set; }
+        public string Estado__c { get; set; }
         public string Numero_de_contrato_de_Dynamics__c { get; set; }
     }
 }
