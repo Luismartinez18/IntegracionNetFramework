@@ -352,9 +352,10 @@ namespace IntegrationWS.Utils
                                             {
                                                 JObject obj2 = JObject.Parse(salesforceId);
                                                 salesforceId = (string)obj2["id"];
-                                                articuloProducto.SalesforceId = salesforceId;
-                                                articuloProducto.DynamicsId = general_Audit.DynamicsId;
-                                                Db.ArticuloProducto.Add(articuloProducto);
+                                                var articuloProduct = new ArticuloProducto();
+                                                articuloProduct.SalesforceId = salesforceId;
+                                                articuloProduct.DynamicsId = general_Audit.DynamicsId;
+                                                Db.ArticuloProducto.Add(articuloProduct);
                                                 Db.SaveChanges();
                                             }
                                         }

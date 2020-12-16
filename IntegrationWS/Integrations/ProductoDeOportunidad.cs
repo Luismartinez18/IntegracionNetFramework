@@ -129,10 +129,13 @@ namespace IntegrationWS.Integrations
             {
                 oportunidad = db_dev.Database.SqlQuery<OpportunitySf>($"SP_GPSalesforce_Opportunity_BySopNumbe '{Id.Trim()}'").FirstOrDefault();
 
-                if (!oportunidad.Name.Contains("*"))
+                if (oportunidad != null) 
                 {
-                    opportunityLineItem = db_dev.Database.SqlQuery<OpportunityLineItem>($"SP_GPSalesforce_OpportunityLineItem_V2 '{Id}'").ToList();
-                }                
+                    if (!oportunidad.Name.Contains("*"))
+                    {
+                        opportunityLineItem = db_dev.Database.SqlQuery<OpportunityLineItem>($"SP_GPSalesforce_OpportunityLineItem_V2 '{Id}'").ToList();
+                    }
+                }      
             }
 
             return opportunityLineItem;

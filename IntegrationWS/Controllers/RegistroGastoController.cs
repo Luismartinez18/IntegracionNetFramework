@@ -43,6 +43,7 @@ namespace IntegrationWS.Controllers
                     }
                 }
 
+                string VENDOR_ID = string.Empty;
                 Pedido pedido = new Pedido();
 
                 pedido.jsonCompleto = new JavaScriptSerializer().Serialize(registroGastoDTO);
@@ -95,6 +96,10 @@ namespace IntegrationWS.Controllers
                 }
                 else
                 {
+                    if (registroGastoDTO.Departamento__c == "Diagnóstica" || registroGastoDTO.Departamento__c == "Médica" || registroGastoDTO.Departamento__c == "Hospitalaria")
+                        VENDOR_ID = "000031";
+                    else
+                        VENDOR_ID = "ZZCAJA";
                     registroGastoDTO.RNC__c = "101070587";
                     registroGastoDTO.Numero_de_factura__c = Guid.NewGuid().ToString();
                 }
@@ -108,6 +113,9 @@ namespace IntegrationWS.Controllers
                 {
                     case "Ingeniería y Aplicaciones": caja = "CC02"; break;
                     case "Tecnología de la Información": caja = "CC02"; break;
+                    case "Diagnóstica": caja = "CC02"; break;
+                    case "Médica": caja = "CC02"; break;
+                    case "Hospitalaria": caja = "CC02"; break;
                 }
 
                 var response1 = new ResponseCreatePayableInvoice();
@@ -115,7 +123,7 @@ namespace IntegrationWS.Controllers
                 
                 using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                 {
-                    response1 = db_dev.Database.SqlQuery<ResponseCreatePayableInvoice>($"BNRD_SP_CreatePayableInvoce '{registroGastoDTO.RNC__c}', '{caja}'").FirstOrDefault();
+                    response1 = db_dev.Database.SqlQuery<ResponseCreatePayableInvoice>($"BNRD_SP_CreatePayableInvoce '{registroGastoDTO.RNC__c}', '{caja}', '{VENDOR_ID}'").FirstOrDefault();
                     pago = db_dev.Database.SqlQuery<string>($"BNRD_SP_CreatePayableInvocePayment").FirstOrDefault();
                 }
 

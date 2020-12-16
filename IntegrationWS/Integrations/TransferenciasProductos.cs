@@ -94,7 +94,8 @@ namespace IntegrationWS.Integrations
             using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
             {
                 productTransfer = db_dev.Database.SqlQuery<ProductTransfer>($"SP_GPSalesforce_ProductTransfer_ByITEMNMBR '{transferId}', '{itemId}'").FirstOrDefault();
-                productTransfer.Id_External__c = Id;
+                if (productTransfer != null)
+                    productTransfer.Id_External__c = Id;
             }
 
             return productTransfer;
