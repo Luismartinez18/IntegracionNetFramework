@@ -16,32 +16,36 @@ namespace IntegrationWS.Controllers
         private readonly DevelopmentDbContext db = new DevelopmentDbContext();
         [HttpGet]
         [Route("getuofm")]
-        public IHttpActionResult GetUOFM(string customer, string product, string currency)
+        public IHttpActionResult GetUOFM([FromUri]string customer, [FromUri]string product, [FromUri]string currency)
         {
             if (string.IsNullOrEmpty(customer) ||
                 string.IsNullOrEmpty(product) ||
                 string.IsNullOrEmpty(currency))
                 return BadRequest();
-            var uofms = db.Database.SqlQuery<string[]>("Select QuantityUnitOfMeasure FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency",
+            var uofms = db.Database.SqlQuery<string>("Select QuantityUnitOfMeasure FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency",
                 new SqlParameter("@product", product),
                 new SqlParameter("@customer", customer),
                 new SqlParameter("@currency", currency));
-            return Ok(uofms);
+            return Ok(uofms.ToList());
         }
         [HttpGet]
         [Route("getPrice")]
-        public IHttpActionResult GetPrice(string customer, string product, string currency, string uofm)
+        public IHttpActionResult GetPrice([FromUri]string customer, [FromUri]string product, [FromUri]string currency, [FromUri]string uofm)
         {
             if (string.IsNullOrEmpty(customer) ||
                 string.IsNullOrEmpty(product) ||
                 string.IsNullOrEmpty(currency) ||
                 string.IsNullOrEmpty(uofm))
                 return BadRequest();
-            var uofms = db.Database.SqlQuery<decimal?>("Select UnitPrice FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency",
+            var price = db.Database.SqlQuery<decimal?>("Select UnitPrice FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency And QuantityUnitOfMeasure = @uofm",
                 new SqlParameter("@product", product),
                 new SqlParameter("@customer", customer),
-                new SqlParameter("@currency", currency));
-            return Ok(uofms);
+                new SqlParameter("@currency", currency),
+                new SqlParameter("@uofm", uofm)).FirstOrDefault();
+            if (price == null)
+                return NotFound();
+
+            return Ok(price);
         }
         protected override void Dispose(bool disposing)
         {
