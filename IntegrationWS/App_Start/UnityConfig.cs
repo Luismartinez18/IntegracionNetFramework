@@ -36,11 +36,13 @@ namespace IntegrationWS
             container.RegisterType<IEntradaDelCatalogoDePrecios, EntradaDelCatalogoDePrecios>();
             container.RegisterType<IListaDePrecios, ListaDePrecios>();
             container.RegisterType<IProductoDeOportunidad, ProductoDeOportunidad>();
+            container.RegisterType<IProductoDePedido, ProductoDePedido>();
             container.RegisterType<IActivos, Activos>();
             container.RegisterType<IExcepcionesFEFO, ExcepcionesFEFO>();
             container.RegisterType<IExcepcionesFEFODetalle, ExcepcionesFEFODetalle>();
             container.RegisterType<IDocumentoAbierto, DocumentoAbierto>();
             container.RegisterType<IProductoConLoteUtils, ProductoConLoteUtils>();
+            container.RegisterType<IPedidos, PedidoServices>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

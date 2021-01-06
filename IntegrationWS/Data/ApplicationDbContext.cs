@@ -32,10 +32,12 @@ namespace IntegrationWS.Data
         public DbSet<AppState> AppState { get; set; }
         public DbSet<Account> Account { get; set; }
         public DbSet<Oportunidad> Oportunidad { get; set; }
+        public DbSet<Pedidos> Pedido { get; set; }
         public DbSet<Contrato> Contrato { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Entrada_del_catalogo_de_precios> Entrada_del_catalogo_de_precios { get; set; }
         public DbSet<Producto_de_oportunidad> Producto_de_oportunidad { get; set; }
+        public DbSet<Producto_de_pedido> Producto_de_pedido { get; set; }
         public DbSet<Lista_De_Precios> Lista_De_Precios { get; set; }
         public DbSet<EquiposDeCuenta> AccountTeamMember { get; set; }
         public DbSet<EquiposDeOportunidad> EquiposDeOportunidad { get; set; }

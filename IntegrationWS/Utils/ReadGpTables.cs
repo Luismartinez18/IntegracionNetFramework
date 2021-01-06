@@ -27,10 +27,12 @@ namespace IntegrationWS.Utils
         private readonly ICuentas _cuentas;
         //private readonly ISobjectCRUD<ProductTransfer> _sobjectCRUD;
         private readonly IOportunidades _oportunidades;
+        private readonly IPedidos _pedidos;
         private readonly IContratos _contratos;
         private readonly IEntradaDelCatalogoDePrecios _entradaDelCatalogo;
         private readonly IListaDePrecios _listaDePrecios;
         private readonly IProductoDeOportunidad _productoDeOportunidad;
+        private readonly IProductoDePedido _productoDePedido;
         private readonly IProductoConLoteUtils _productoConLoteUtils;
         private readonly IActivos _activos;
         private readonly IExcepcionesFEFO _excepcionesFEFO;
@@ -54,12 +56,14 @@ namespace IntegrationWS.Utils
                               IEntradaDelCatalogoDePrecios entradaDelCatalogo,
                               IListaDePrecios listaDePrecios,
                               IProductoDeOportunidad productoDeOportunidad,
+                              IProductoDePedido productoDePedido,
                               IProductoConLoteUtils productoConLoteUtils,
                               IActivos activos,
                               IExcepcionesFEFO excepcionesFEFO,
                               IExcepcionesFEFODetalle excepcionesFEFODetalle,
                               IDocumentoAbierto documentoAbierto,
-                              IContratos contratos)
+                              IContratos contratos,
+                              IPedidos pedidos)
         {
             _productos = productos;
             _articulosProductos = articulosProductos;
@@ -72,12 +76,14 @@ namespace IntegrationWS.Utils
             _entradaDelCatalogo = entradaDelCatalogo;
             _listaDePrecios = listaDePrecios;
             _productoDeOportunidad = productoDeOportunidad;
+            _productoDePedido = productoDePedido;
             _productoConLoteUtils = productoConLoteUtils;
             _activos = activos;
             _excepcionesFEFO = excepcionesFEFO;
             _excepcionesFEFODetalle = excepcionesFEFODetalle;
             _documentoAbierto = documentoAbierto;
             _contratos = contratos;
+            _pedidos = pedidos;
         }
         public async Task Run()
         {
@@ -499,7 +505,7 @@ namespace IntegrationWS.Utils
                                 }
 
                                 //Oportunidades
-                                if (general_Audit.TableName == "SOP30200")
+                                if (general_Audit.TableName == "SOP30200" && !general_Audit.DynamicsId.Trim().StartsWith("PIN") && !general_Audit.DynamicsId.Trim().StartsWith("PED"))
                                 {
                                     General_Audit newForSOP30300 = new General_Audit();
                                     newForSOP30300.Activity = general_Audit.Activity;
@@ -813,26 +819,58 @@ namespace IntegrationWS.Utils
                                     }
                                 }
 
-                                //Productos de oportunidad
+                                //Productos de oportunidad e pedidos
                                 if (general_Audit.TableName == "SOP30300")
                                 {
-                                    if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                    Int16 type = 0;
+                                    using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                                     {
-                                        Producto_de_oportunidad producto_de_oportunidad = new Producto_de_oportunidad();
-                                        producto_de_oportunidad.DynamicsId = Db.Producto_de_oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        type = db_dev.Database.SqlQuery<Int16>($"SP_GPSalesforce_TYPE_BySopNumbe '{general_Audit.DynamicsId.Trim()}'").FirstOrDefault();
+                                    }
 
-                                        var salesforceId = await _productoDeOportunidad.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
-
-                                        if (salesforceId.Contains("versions 3.0 and higher must specify pricebook entry id"))
+                                    if (type == 2)
+                                    {
+                                        if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
                                         {
-                                            continue;
-                                        }
+                                            Producto_de_pedido Producto_de_pedido = new Producto_de_pedido();
+                                            Producto_de_pedido.DynamicsId = Db.Producto_de_pedido.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
 
-                                        if (!salesforceId.Contains("field integrity exception"))
-                                        {
-                                            if (salesforceId.Contains("errorCode"))
+                                            var salesforceId = await _productoDePedido.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceId.Contains("versions 3.0 and higher must specify pricebook entry id"))
                                             {
-                                                throw new Exception(salesforceId);
+                                                continue;
+                                            }
+
+                                            if (!salesforceId.Contains("field integrity exception"))
+                                            {
+                                                if (salesforceId.Contains("errorCode"))
+                                                {
+                                                    throw new Exception(salesforceId);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                        {
+                                            Producto_de_oportunidad producto_de_oportunidad = new Producto_de_oportunidad();
+                                            producto_de_oportunidad.DynamicsId = Db.Producto_de_oportunidad.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+
+                                            var salesforceId = await _productoDeOportunidad.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceId.Contains("versions 3.0 and higher must specify pricebook entry id"))
+                                            {
+                                                continue;
+                                            }
+
+                                            if (!salesforceId.Contains("field integrity exception"))
+                                            {
+                                                if (salesforceId.Contains("errorCode"))
+                                                {
+                                                    throw new Exception(salesforceId);
+                                                }
                                             }
                                         }
                                     }
@@ -1208,6 +1246,90 @@ namespace IntegrationWS.Utils
                                         if (salesforceResponse == "Ok")
                                         {
                                             Db.Contrato.Remove(objectFromDb);
+                                            Db.SaveChanges();
+                                        }
+
+                                        if (salesforceResponse != "Ok")
+                                        {
+                                            throw new Exception(salesforceResponse);
+                                        }
+                                    }
+                                }
+
+                                //Pedidos
+                                if (general_Audit.TableName == "SOP30200" && (general_Audit.DynamicsId.Trim().StartsWith("PED") || general_Audit.DynamicsId.Trim().StartsWith("PIN")))
+                                {
+                                    General_Audit newForSOP30300 = new General_Audit();
+                                    newForSOP30300.Activity = general_Audit.Activity;
+                                    newForSOP30300.DateOfChanged = general_Audit.DateOfChanged;
+                                    newForSOP30300.DoneBy = general_Audit.DoneBy;
+                                    newForSOP30300.DynamicsId = general_Audit.DynamicsId;
+                                    newForSOP30300.HasChanged = general_Audit.HasChanged;
+                                    newForSOP30300.TableName = "SOP30300";
+
+                                    Db_Dev.General_Audit.Add(newForSOP30300);
+                                    Db_Dev.SaveChanges();
+
+                                    if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                    {
+                                        Pedidos pedido = new Pedidos();
+                                        pedido.DynamicsId = Db.Pedido.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+                                        pedido.SalesforceId = Db.Pedido.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.SalesforceId).FirstOrDefault();
+
+                                        if (pedido.DynamicsId == null)
+                                        {
+                                            var salesforceId = await _pedidos.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceId == "actualizado")
+                                            {
+                                                Db_Dev.General_Audit.Remove(general_Audit);
+                                                general_Audit_History.TableName = general_Audit.TableName;
+                                                general_Audit_History.DynamicsId = general_Audit.DynamicsId;
+                                                general_Audit_History.Activity = general_Audit.Activity;
+                                                general_Audit_History.DoneBy = general_Audit.DoneBy;
+                                                general_Audit_History.DateOfChanged = general_Audit.DateOfChanged;
+                                                Db_Dev.General_Audit_History.Add(general_Audit_History);
+                                                Db_Dev.SaveChanges();
+                                                continue;
+                                            }
+                                            else if (salesforceId.Contains("errorCode"))
+                                            {
+                                                throw new Exception(salesforceId);
+                                            }
+                                        }
+                                        else if (pedido.DynamicsId != null)
+                                        {
+                                            var salesforceResponse = await _pedidos.update(general_Audit.DynamicsId, loginResult, authToken, serviceURL, pedido.SalesforceId);
+
+                                            if (salesforceResponse != "Ok")
+                                            {
+                                                JArray jsonArray = JArray.Parse(salesforceResponse);
+                                                salesforceResponse = jsonArray[0].ToString();
+                                                JObject obj3 = JObject.Parse(salesforceResponse);
+                                                salesforceResponse = (string)obj3["errorCode"];
+
+                                                if (salesforceResponse == "ENTITY_IS_DELETED")
+                                                {
+                                                    var ped = Db.Pedido.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                                    Db.Pedido.Remove(ped);
+                                                    Db.SaveChanges();
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception(salesforceResponse);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    else if (general_Audit.Activity == "DELETE")
+                                    {
+                                        var objectFromDb = Db.Pedido.Where(x => x.DynamicsId == general_Audit.DynamicsId).FirstOrDefault();
+                                        var salesforceResponse = await _pedidos.delete(loginResult, objectFromDb.SalesforceId);
+                                        if (salesforceResponse == "Ok")
+                                        {
+                                            Db.Pedido.Remove(objectFromDb);
                                             Db.SaveChanges();
                                         }
 
