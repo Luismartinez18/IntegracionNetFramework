@@ -1,6 +1,8 @@
 ﻿using IntegrationWS.Data;
+using IntegrationWS.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -14,43 +16,46 @@ namespace IntegrationWS.Controllers
     public class PriceController : ApiController
     {
         private readonly DevelopmentDbContext db = new DevelopmentDbContext();
-        [HttpGet]
-        [Route("getuofm")]
-        public IHttpActionResult GetUOFM([FromUri]string customer, [FromUri]string product, [FromUri]string currency)
+        [HttpPost]
+        [Route("getPrices")]
+        public IHttpActionResult GetPrices([FromBody] GetPricesRequest request)
         {
-            if (string.IsNullOrEmpty(customer) ||
-                string.IsNullOrEmpty(product) ||
-                string.IsNullOrEmpty(currency))
+            if (!ModelState.IsValid)
                 return BadRequest();
-            var uofms = db.Database.SqlQuery<string>("Select QuantityUnitOfMeasure FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency",
-                new SqlParameter("@product", product),
-                new SqlParameter("@customer", customer),
-                new SqlParameter("@currency", currency));
-            return Ok(uofms.ToList());
-        }
-        [HttpGet]
-        [Route("getPrice")]
-        public IHttpActionResult GetPrice([FromUri]string customer, [FromUri]string product, [FromUri]string currency, [FromUri]string uofm)
-        {
-            if (string.IsNullOrEmpty(customer) ||
-                string.IsNullOrEmpty(product) ||
-                string.IsNullOrEmpty(currency) ||
-                string.IsNullOrEmpty(uofm))
-                return BadRequest();
-            var price = db.Database.SqlQuery<decimal?>("Select UnitPrice FROM Prices Where Product = @product And Customer = @customer And CurrencyIsoCode = @currency And QuantityUnitOfMeasure = @uofm",
-                new SqlParameter("@product", product),
-                new SqlParameter("@customer", customer),
-                new SqlParameter("@currency", currency),
-                new SqlParameter("@uofm", uofm)).FirstOrDefault();
-            if (price == null)
-                return NotFound();
 
-            return Ok(price);
+            var prices = db.Database.SqlQuery<Price>("ListaPreciosPorClientePorProducto @customer,@product,@currency",
+            new SqlParameter("@product", request.Product),
+            new SqlParameter("@customer", request.Customer),
+            new SqlParameter("@currency", request.CurrencyIsoCode));
+            var gpr = new GetPriceResponse();
+            gpr.Product = request.Product;
+            gpr.Prices = prices.Select(x => new GetPriceResponse.Price { UnitOfMeasure = x.UnitOfMeasure, UnitPrice = x.UnitPrice }).ToList();
+
+            return Ok(gpr);
         }
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
             db.Dispose();
+        }
+        public class GetPricesRequest
+        {
+            [Required]
+            public string Product { get; set; }
+            [Required]
+            public string Customer { get; set; }
+            [Required]
+            public string CurrencyIsoCode { get; set; }
+        }
+        public class GetPriceResponse
+        {
+            public string Product { get; set; }
+            public List<Price> Prices { get; set; }
+            public class Price
+            {
+                public string UnitOfMeasure { get; set; }
+                public decimal UnitPrice { get; set; }
+            }
         }
     }
 }
