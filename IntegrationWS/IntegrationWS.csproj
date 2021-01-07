@@ -1051,6 +1051,7 @@
     <Compile Include="Models\Pedidos.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Pedido.cs" />
+    <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\Producto_de_pedido.cs" />
     <Compile Include="Models\Producto_de_oportunidad.cs" />
