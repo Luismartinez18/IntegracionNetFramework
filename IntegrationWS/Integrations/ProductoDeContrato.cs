@@ -12,43 +12,34 @@ using System.Web;
 
 namespace IntegrationWS.Integrations
 {
-    public class ProductoDePedido : IProductoDePedido
+    public class ProductoDeContrato : IProductoDeContrato
     {
         private readonly IResponseAfterAuth _responseAfterAuth;
         private readonly IAuthToSalesforce _authToSalesforce;
-        private readonly ISobjectCRUD<PedidoLineItem> _sobjectCRUD;
+        private readonly ISobjectCRUD<ContratoLineItem> _sobjectCRUD;
         private readonly string sobject;
 
-        public ProductoDePedido(IAuthToSalesforce authToSalesforce, ISobjectCRUD<PedidoLineItem> sobjectCRUD, IResponseAfterAuth responseAfterAuth)
+        public ProductoDeContrato(IAuthToSalesforce authToSalesforce, ISobjectCRUD<ContratoLineItem> sobjectCRUD, IResponseAfterAuth responseAfterAuth)
         {
             _responseAfterAuth = responseAfterAuth;
             _authToSalesforce = authToSalesforce;
             _sobjectCRUD = sobjectCRUD;
-            sobject = "PedidoItem__c";
+            sobject = "Contrato_de_servicio_Detalle__c";
         }
 
         public async Task<string> create(string Id, string loginResult, string authToken, string serviceURL)
         {
-            List<PedidoLineItem> pedidoLineItemList = getOne(Id);
+            List<ContratoLineItem> contratoLineItemList = getOne(Id);
             
             var result = string.Empty;
 
-            foreach (PedidoLineItem pedidoLineItem in pedidoLineItemList)
+            foreach (ContratoLineItem contratoLineItem in contratoLineItemList)
             {     
-                result = await _sobjectCRUD.addSobjectAsync(loginResult, pedidoLineItem, sobject);
+                result = await _sobjectCRUD.addSobjectAsync(loginResult, contratoLineItem, sobject);
 
                 if(result.Contains("versions 3.0 and higher must specify pricebook entry id"))
                 {
-                    string producto;
-                    string Order;
-
-                    using (ApplicationDbContext db = new ApplicationDbContext())
-                    {
-                        Order = db.Pedido.Where(x => x.SalesforceId == pedidoLineItem.Pedidos__c).Select(x => x.DynamicsId).FirstOrDefault();                        
-
-                        producto = db.Productos.Where(x => x.SalesforceId == pedidoLineItem.Producto__c).Select(x => x.DynamicsId).FirstOrDefault();
-                    }
-
+                    result = "errorCode";
                     return result;
                 }                
 
@@ -62,6 +53,8 @@ namespace IntegrationWS.Integrations
                 {
                     return result;
                 }
+
+
             }
             
             return result;
@@ -69,18 +62,18 @@ namespace IntegrationWS.Integrations
 
         public async Task<string> update(string Id, string loginResult, string authToken, string serviceURL)
         {
-            List<PedidoLineItem> pedidoLineItemList = getOne(Id);
+            List<ContratoLineItem> contratoLineItemList = getOne(Id);
             string salesforceID = string.Empty;
             
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                salesforceID = db.Producto_de_pedido.Where(x => x.DynamicsId == Id).Select(x => x.SalesforceId).FirstOrDefault();
+                salesforceID = db.Producto_de_contrato.Where(x => x.DynamicsId == Id).Select(x => x.SalesforceId).FirstOrDefault();
             }
 
             var result = string.Empty;
-            foreach (PedidoLineItem pedidoLineItem in pedidoLineItemList)
+            foreach (ContratoLineItem contratoLineItem in contratoLineItemList)
             {
-                result = await _sobjectCRUD.updateSobjectByIdAsync(loginResult, pedidoLineItem, salesforceID, sobject);
+                result = await _sobjectCRUD.updateSobjectByIdAsync(loginResult, contratoLineItem, salesforceID, sobject);
             }
 
             if (result != "Ok")
@@ -103,22 +96,22 @@ namespace IntegrationWS.Integrations
             return result;
         }
 
-        public List<PedidoLineItem> getOne(string Id)
+        public List<ContratoLineItem> getOne(string Id)
         {
-            PedidoSf pedido = new PedidoSf();
-            List<PedidoLineItem> pedidoLineItem = new List<PedidoLineItem>();
+            ContractSf contrato = new ContractSf();
+            List<ContratoLineItem> contratoLineItem = new List<ContratoLineItem>();
 
             using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
             {
-                pedido = db_dev.Database.SqlQuery<PedidoSf>($"SP_GPSalesforce_Pedido_BySopNumbe '{Id.Trim()}'").FirstOrDefault();
+                contrato = db_dev.Database.SqlQuery<ContractSf>($"SP_GPSalesforce_Contract_ByContnbr '{Id.Trim()}'").FirstOrDefault();
 
-                if (pedido != null) 
+                if (contrato != null) 
                 {
-                    pedidoLineItem = db_dev.Database.SqlQuery<PedidoLineItem>($"SP_GPSalesforce_PedidoLineItem_V2 '{Id}'").ToList();
+                    contratoLineItem = db_dev.Database.SqlQuery<ContratoLineItem>($"SP_GPSalesforce_ContratoLineItem '{Id}'").ToList();
                 }      
             }
 
-            return pedidoLineItem;
+            return contratoLineItem;
         }
     }
 }

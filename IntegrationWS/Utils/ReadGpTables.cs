@@ -32,6 +32,7 @@ namespace IntegrationWS.Utils
         private readonly IEntradaDelCatalogoDePrecios _entradaDelCatalogo;
         private readonly IListaDePrecios _listaDePrecios;
         private readonly IProductoDeOportunidad _productoDeOportunidad;
+        private readonly IProductoDeContrato _productoDeContrato;
         private readonly IProductoDePedido _productoDePedido;
         private readonly IProductoConLoteUtils _productoConLoteUtils;
         private readonly IActivos _activos;
@@ -56,6 +57,7 @@ namespace IntegrationWS.Utils
                               IEntradaDelCatalogoDePrecios entradaDelCatalogo,
                               IListaDePrecios listaDePrecios,
                               IProductoDeOportunidad productoDeOportunidad,
+                              IProductoDeContrato productoDeContrato,
                               IProductoDePedido productoDePedido,
                               IProductoConLoteUtils productoConLoteUtils,
                               IActivos activos,
@@ -76,6 +78,7 @@ namespace IntegrationWS.Utils
             _entradaDelCatalogo = entradaDelCatalogo;
             _listaDePrecios = listaDePrecios;
             _productoDeOportunidad = productoDeOportunidad;
+            _productoDeContrato = productoDeContrato;
             _productoDePedido = productoDePedido;
             _productoConLoteUtils = productoConLoteUtils;
             _activos = activos;
@@ -1186,6 +1189,16 @@ namespace IntegrationWS.Utils
                                 //Contrato
                                 if (general_Audit.TableName == "SVC00600") 
                                 {
+                                    General_Audit newForSVC00601 = new General_Audit();
+                                    newForSVC00601.Activity = general_Audit.Activity;
+                                    newForSVC00601.DateOfChanged = general_Audit.DateOfChanged;
+                                    newForSVC00601.DoneBy = general_Audit.DoneBy;
+                                    newForSVC00601.DynamicsId = general_Audit.DynamicsId;
+                                    newForSVC00601.HasChanged = general_Audit.HasChanged;
+                                    newForSVC00601.TableName = "SVC00601";
+                                    Db_Dev.General_Audit.Add(newForSVC00601);
+                                    Db_Dev.SaveChanges();
+
                                     if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
                                     {
                                         Contrato contrato = new Contrato();
@@ -1256,19 +1269,47 @@ namespace IntegrationWS.Utils
                                     }
                                 }
 
+                                //Productos de contrato
+                                if (general_Audit.TableName == "SVC00601")
+                                {
+                                    if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                    {
+                                        Producto_de_contrato producto_de_contrato = new Producto_de_contrato();
+                                        producto_de_contrato.DynamicsId = Db.Producto_de_contrato.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+
+                                        var salesforceId = await _productoDeContrato.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                        if (salesforceId.Contains("versions 3.0 and higher must specify pricebook entry id"))
+                                        {
+                                            continue;
+                                        }
+
+                                        if (!salesforceId.Contains("field integrity exception"))
+                                        {
+                                            if (salesforceId.Contains("errorCode"))
+                                            {
+                                                throw new Exception(salesforceId);
+                                            }
+                                        }
+                                    }
+                                }
+
                                 //Pedidos
                                 if (general_Audit.TableName == "SOP30200" && (general_Audit.DynamicsId.Trim().StartsWith("PED") || general_Audit.DynamicsId.Trim().StartsWith("PIN")))
                                 {
-                                    General_Audit newForSOP30300 = new General_Audit();
-                                    newForSOP30300.Activity = general_Audit.Activity;
-                                    newForSOP30300.DateOfChanged = general_Audit.DateOfChanged;
-                                    newForSOP30300.DoneBy = general_Audit.DoneBy;
-                                    newForSOP30300.DynamicsId = general_Audit.DynamicsId;
-                                    newForSOP30300.HasChanged = general_Audit.HasChanged;
-                                    newForSOP30300.TableName = "SOP30300";
+                                    if (general_Audit.DoneBy != "WMSDB") 
+                                    {
+                                        General_Audit newForSOP30300 = new General_Audit();
+                                        newForSOP30300.Activity = general_Audit.Activity;
+                                        newForSOP30300.DateOfChanged = general_Audit.DateOfChanged;
+                                        newForSOP30300.DoneBy = general_Audit.DoneBy;
+                                        newForSOP30300.DynamicsId = general_Audit.DynamicsId;
+                                        newForSOP30300.HasChanged = general_Audit.HasChanged;
+                                        newForSOP30300.TableName = "SOP30300";
 
-                                    Db_Dev.General_Audit.Add(newForSOP30300);
-                                    Db_Dev.SaveChanges();
+                                        Db_Dev.General_Audit.Add(newForSOP30300);
+                                        Db_Dev.SaveChanges();
+                                    }
 
                                     if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
                                     {

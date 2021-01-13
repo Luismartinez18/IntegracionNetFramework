@@ -27,7 +27,7 @@ namespace IntegrationWS.Integrations
             _responseAfterAuth = responseAfterAuth;
             _authToSalesforce = authToSalesforce;
             _sobjectCRUD = sobjectCRUD;
-            sobject = "Contract";
+            sobject = "ServiceContract";
         }
 
         public async Task<string> create(string Id, string loginResult, string authToken, string serviceURL)

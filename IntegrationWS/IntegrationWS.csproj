@@ -866,6 +866,7 @@
     <Compile Include="Integrations\Interfaces\IPedidos.cs" />
     <Compile Include="Integrations\Interfaces\IOportunidades.cs" />
     <Compile Include="Integrations\Interfaces\IProductoConLoteUtils.cs" />
+    <Compile Include="Integrations\Interfaces\IProductoDeContrato.cs" />
     <Compile Include="Integrations\Interfaces\IProductoDePedido.cs" />
     <Compile Include="Integrations\Interfaces\IProductoDeOportunidad.cs" />
     <Compile Include="Integrations\Interfaces\IProductos.cs" />
@@ -876,6 +877,7 @@
     <Compile Include="Integrations\PedidoServices.cs" />
     <Compile Include="Integrations\Oportunidades.cs" />
     <Compile Include="Integrations\ProductoConLoteUtils.cs" />
+    <Compile Include="Integrations\ProductoDeContrato.cs" />
     <Compile Include="Integrations\ProductoDePedido.cs" />
     <Compile Include="Integrations\ProductoDeOportunidad.cs" />
     <Compile Include="Integrations\Productos.cs" />
@@ -995,6 +997,10 @@
     <Compile Include="Migrations\202012300212309_agregando_tabla_pedidos_producto.Designer.cs">
       <DependentUpon>202012300212309_agregando_tabla_pedidos_producto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101121228049_agregando_tabla_producto_de_contrato.cs" />
+    <Compile Include="Migrations\202101121228049_agregando_tabla_producto_de_contrato.Designer.cs">
+      <DependentUpon>202101121228049_agregando_tabla_producto_de_contrato.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelsNotMapped\AccountSf.cs" />
     <Compile Include="ModelsNotMapped\AccountTeamMember.cs" />
@@ -1007,6 +1013,7 @@
     <Compile Include="ModelsNotMapped\DocumentoAbiertoSf.cs" />
     <Compile Include="ModelsNotMapped\Excepci_n_FEFO__c.cs" />
     <Compile Include="ModelsNotMapped\LocationSf.cs" />
+    <Compile Include="ModelsNotMapped\ContratoLineItem.cs" />
     <Compile Include="ModelsNotMapped\PedidoLineItem.cs" />
     <Compile Include="ModelsNotMapped\OpportunityLineItem.cs" />
     <Compile Include="ModelsNotMapped\ContractSf.cs" />
@@ -1054,6 +1061,7 @@
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Producto.cs" />
+    <Compile Include="Models\Producto_de_contrato.cs" />
     <Compile Include="Models\Producto_de_pedido.cs" />
     <Compile Include="Models\Producto_de_oportunidad.cs" />
     <Compile Include="Models\TransferenciaProducto.cs" />
@@ -1188,6 +1196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012300212309_agregando_tabla_pedidos_producto.resx">
       <DependentUpon>202012300212309_agregando_tabla_pedidos_producto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101121228049_agregando_tabla_producto_de_contrato.resx">
+      <DependentUpon>202101121228049_agregando_tabla_producto_de_contrato.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
