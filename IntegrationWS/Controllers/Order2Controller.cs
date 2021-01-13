@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
+using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
@@ -45,9 +46,9 @@ namespace IntegrationWS.Controllers
 
                 if (string.IsNullOrEmpty(respuesta))
                 {
-                    CompanyKey companyKey;
-                    Context context;
-                    SalesOrder salesOrder;
+                    CompanyKey companyKey = new CompanyKey { Id = 1 };
+                    Context context = new Context() { OrganizationKey = companyKey };
+                    SalesOrder salesOrder = new SalesOrder();
                     SalesDocumentTypeKey salesOrderType;
                     CustomerKey customerKey;
                     BatchKey batchKey;
@@ -56,20 +57,6 @@ namespace IntegrationWS.Controllers
                     Policy salesOrderCreatePolicy;
                     // Create an instance of the service
                     DynamicsGPClient wsDynamicsGP = new DynamicsGPClient();
-
-                    // Create a context
-                    context = new Context();
-
-                    // Specify which company to use (sample company)
-                    companyKey = new CompanyKey();
-                    companyKey.Id = 1;
-
-                    // Set up the context object
-                    context.OrganizationKey = companyKey;
-
-
-                    // Create a sales order object
-                    salesOrder = new SalesOrder();
 
 
                     // Create a sales document type key for the sales order
@@ -134,26 +121,31 @@ namespace IntegrationWS.Controllers
                         salesOrderLine.WarehouseKey = whKey;
 
                         decimal? monto;
-
-                        using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
+                        if (product.Precio == null)
                         {
-                            monto = db_dev.Database.SqlQuery<decimal?>($"BuscarPrecioEnListaAsignada '{opportunitiesDTO.CodigoCliente}', '{product.CodigoDeProducto}', '{product.UnidadDeMedida}', {product.Cantidad}").FirstOrDefault();
-
-                            if (monto != null)
+                            using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
                             {
-                                salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)monto };
+                                monto = db_dev.Database.SqlQuery<decimal?>($"BuscarPrecioEnListaAsignada '{opportunitiesDTO.CodigoCliente}', '{product.CodigoDeProducto}', '{product.UnidadDeMedida}', {product.Cantidad}").FirstOrDefault();
 
-                                if (product.Descuento > 0)
+                                if (monto != null)
                                 {
-                                    salesOrderLine.Discount = new MoneyPercentChoice() { Item = new Percent() { Value = product.Descuento } };
+                                    salesOrderLine.UnitPrice = new MoneyAmount { Value = (decimal)monto };
+                                }
+                                else if (monto == null)
+                                {
+                                    return Ok(IntegrationResult.GetBadRequestResult($"Producto {product.CodigoDeProducto} no tiene precio asignado."));
                                 }
                             }
-                            else if (monto == null)
-                            {
-                                throw new Exception($"El producto {product.CodigoDeProducto} no tiene precio asignado.");
-                            }
                         }
-
+                        else
+                        {
+                            salesOrderLine.UnitPrice = new MoneyAmount { Value = product.Precio.Value };
+                        }
+                        if (product.Descuento > 0)
+                        {
+                            salesOrderLine.Discount = new MoneyPercentChoice() { Item = new Percent() { Value = product.Descuento } };
+                        }
+                        salesOrderLine.UofM = product.UnidadDeMedida;
                         orders.Add(salesOrderLine);
 
                         cont++;
@@ -186,13 +178,17 @@ namespace IntegrationWS.Controllers
 
                 return Ok(IntegrationResult.GetSuccessResult(respuesta.Trim()));
             }
+            catch (SecurityNegotiationException se)
+            {
+                return Ok(IntegrationResult.GetErrorResult(se.Message));
+            }
             catch (FaultException<ExceptionDetail> fe)
             {
-                return Content(HttpStatusCode.BadRequest, IntegrationResult.GetErrorResult(fe.Detail?.Message ?? fe.Message));
+                return Ok(IntegrationResult.GetBadRequestResult(fe.Detail?.Message));
             }
             catch (Exception e)
             {
-                return Content(HttpStatusCode.BadRequest, IntegrationResult.GetErrorResult(e.ToString()));
+                return Ok(IntegrationResult.GetErrorResult(e.ToString()));
             }
         }
     }
