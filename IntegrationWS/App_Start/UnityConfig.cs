@@ -36,6 +36,7 @@ namespace IntegrationWS
             container.RegisterType<IEntradaDelCatalogoDePrecios, EntradaDelCatalogoDePrecios>();
             container.RegisterType<IListaDePrecios, ListaDePrecios>();
             container.RegisterType<IProductoDeOportunidad, ProductoDeOportunidad>();
+            container.RegisterType<IProductoDeContrato, ProductoDeContrato>();
             container.RegisterType<IProductoDePedido, ProductoDePedido>();
             container.RegisterType<IActivos, Activos>();
             container.RegisterType<IExcepcionesFEFO, ExcepcionesFEFO>();
