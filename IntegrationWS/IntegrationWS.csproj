@@ -820,6 +820,7 @@
     <Compile Include="Controllers\ComisionMedicaController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\OpportunityToQuoteController.cs" />
+    <Compile Include="Controllers\Order2Controller.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
     <Compile Include="Controllers\ProductController.cs" />

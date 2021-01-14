@@ -34,12 +34,19 @@ namespace IntegrationWS.Models
         {
             ErrorMessage = errorMessage,
             OperationResult = NOT_FOUND
-        }; 
+        };
+        public static IntegrationResult GetBadRequestResult(string errorMessage) => new IntegrationResult 
+        {
+            ErrorMessage = errorMessage,
+            OperationResult = BADREQUEST
+        };
         [JsonIgnore]
         public const string ERROR = "ERROR";
         [JsonIgnore]
         public const string SUCCESS = "SUCCESS";
         [JsonIgnore]
         public const string NOT_FOUND = "NOT_FOUND";
+        [JsonIgnore]
+        public const string BADREQUEST = "BADREQUEST";
     }
 }
