@@ -23,6 +23,7 @@ namespace IntegrationWS.ModelsNotMapped
         public string Estado__c { get; set; }
         public string Pricebook2Id { get; set; }
         public int Supendido__c { get; set; }
+        public string ParentServiceContractId { get; set; }
         public string Numero_de_contrato_de_Dynamics__c { get; set; }
     }
 }
