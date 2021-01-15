@@ -21,5 +21,6 @@ namespace IntegrationWS.Utils.Interfaces
         Task<string> rawQueryAsset(string loginResult, TEntity entity, string id, string sobject);        
         Task<string> TeamMemberId(string loginResult, string acc, string userId, string sobject, string obj);
         Task<string> BulkApi(string loginResult, string sobject, string operation);
+        Task<string> rawQuery6(string loginResult, TEntity entity, string id, string sobject);
     }
 }

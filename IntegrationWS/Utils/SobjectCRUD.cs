@@ -464,5 +464,32 @@ namespace IntegrationWS.Utils
 
             return result;
         }
+
+        public async Task<string> rawQuery6(string loginResult, TEntity entity, string id, string sobject)
+        {
+            var convertResponse = _responseAfterAuth.convertResponse(loginResult);
+
+            string result = string.Empty;
+
+            string restCallURL = $"{convertResponse.serviceURL}/services/data/{convertResponse.version.ToLower()}/query/?q=SELECT+id+from+{sobject}+WHERE+Pedido_Dynamics__c+LIKE+'{id.Trim()}'";
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, restCallURL);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Add("authorization", "Bearer " + convertResponse.authToken);
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = await response.Content.ReadAsStringAsync();
+                    JObject obj2 = JObject.Parse(result);
+                    var records = obj2["records"];
+                    result = records[0].Value<string>("Id");
+                }
+
+                return result;
+            }
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace IntegrationWS.Integrations
 ;
             if (result.Contains("DUPLICATE"))
             {
-                SalesforceId = await _sobjectCRUD.rawQuery2(loginResult, PedidoSf, Id, sobject);
+                SalesforceId = await _sobjectCRUD.rawQuery6(loginResult, PedidoSf, Id, sobject);
 
                 Pedidos Pedidos = new Pedidos();
                 Pedidos.DynamicsId = Id;
