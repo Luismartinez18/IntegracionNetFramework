@@ -113,9 +113,9 @@ namespace IntegrationWS.Controllers
                 {
                     case "Ingeniería y Aplicaciones": caja = "CC02"; break;
                     case "Tecnología de la Información": caja = "CC02"; break;
-                    case "Diagnóstica": caja = "CC02"; break;
-                    case "Médica": caja = "CC02"; break;
-                    case "Hospitalaria": caja = "CC02"; break;
+                    case "Diagnóstica": caja = "CC05"; break;
+                    case "Médica": caja = "CC05"; break;
+                    case "Hospitalaria": caja = "CC05"; break;
                 }
 
                 var response1 = new ResponseCreatePayableInvoice();
@@ -297,13 +297,18 @@ namespace IntegrationWS.Controllers
 
                 PayablesCashDetail payablesCashDetail = new PayablesCashDetail();
                 payablesCashDetail.DocumentId = "EFECTIVO";
+                //payablesCashDetail.DocumentId = "PAGO";
                 payablesCashDetail.Amount = MontoNeto;
                 payablesCashDetail.Date = registroGastoDTO.Fecha_de_consumo__c;
                 payablesCashDetail.Number = pago.Trim();
 
                 BankAccountKey bankAccountKey = new BankAccountKey();
                 bankAccountKey.CompanyKey = companyKey;
-                bankAccountKey.Id = "CC02_DIA";
+                
+                if (registroGastoDTO.Departamento__c == "Diagnóstica" || registroGastoDTO.Departamento__c == "Médica" || registroGastoDTO.Departamento__c == "Hospitalaria")
+                    bankAccountKey.Id = "BPD_DOP_8274";
+                else
+                    bankAccountKey.Id = "CC02_DIA";
 
                 payablesCashDetail.BankAccountKey = bankAccountKey;
 
