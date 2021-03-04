@@ -145,7 +145,20 @@ namespace IntegrationWS.Controllers
                     //Iterando los productos recibidos
                     int cont = 1;
                     foreach (var product in caseDTO.products)
-                    {                      
+                    {
+
+                        if (product.C_digo_del_producto__c != "serv000002" && product.C_digo_del_producto__c != "serv000001" && product.C_digo_del_producto__c != "serv000050") 
+                        {
+                            using (DevelopmentDbContext db_bnrd = new DevelopmentDbContext())
+                            {
+                                var response = db_bnrd.Database.SqlQuery<int>($"EXEC VerficicarExistenciaProducto '{product.Locker__c}', '{product.C_digo_del_producto__c}', {product.QuantityConsumed__c} ").FirstOrDefault();
+
+                                if (response == 0)
+                                {
+                                    throw new Exception($"El producto {product.C_digo_del_producto__c} no tiene la cantidad suficiente para consumir.");
+                                }
+                            }
+                        }
 
                         //SIN LOTE Y SIN SERIE
                         if (product.Serie__c == null && product.Lote__c == null)
@@ -489,7 +502,7 @@ namespace IntegrationWS.Controllers
             }
             catch(Exception e)
             {
-                return Content(HttpStatusCode.BadRequest, e.ToString());
+                return Content(HttpStatusCode.BadRequest, e.Message);
             }         
         }
     }
