@@ -147,7 +147,7 @@ namespace IntegrationWS.Controllers
                     foreach (var product in caseDTO.products)
                     {
 
-                        if (product.C_digo_del_producto__c != "serv000002" && product.C_digo_del_producto__c != "serv000001" && product.C_digo_del_producto__c != "serv000050") 
+                        if (product.C_digo_del_producto__c != "serv000002" && product.C_digo_del_producto__c != "serv000001" && product.C_digo_del_producto__c != "serv000050")
                         {
                             using (DevelopmentDbContext db_bnrd = new DevelopmentDbContext())
                             {
