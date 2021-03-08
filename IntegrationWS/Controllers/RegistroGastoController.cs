@@ -224,7 +224,6 @@ namespace IntegrationWS.Controllers
 
                 // Create a payables invoice object 
                 payablesInvoice = new PayablesInvoice();
-
                 if (!registroGastoDTO.Exento_de_ITBIS__c)
                 {
                     if (registroGastoDTO.Propina_legal__c)
@@ -295,12 +294,17 @@ namespace IntegrationWS.Controllers
                 MontoNeto.Currency = "DOP";
                 MontoNeto.Value = registroGastoDTO.Monto__c;
 
-                PayablesCashDetail payablesCashDetail = new PayablesCashDetail();
-                payablesCashDetail.DocumentId = "EFECTIVO";
-                //payablesCashDetail.DocumentId = "PAGO";
-                payablesCashDetail.Amount = MontoNeto;
-                payablesCashDetail.Date = registroGastoDTO.Fecha_de_consumo__c;
-                payablesCashDetail.Number = pago.Trim();
+                //PayablesCashDetail payablesCashDetail = new PayablesCashDetail();
+                //payablesCashDetail.DocumentId = pago.Trim();
+                ////payablesCashDetail.DocumentId = "PAGO";
+                //payablesCashDetail.Amount = MontoNeto;
+                //payablesCashDetail.Date = registroGastoDTO.Fecha_de_consumo__c;
+                //payablesCashDetail.Number = pago.Trim();
+
+                //PayablesCreditDocument payablesCreditDocument = new PayablesCreditDocument 
+                //{
+
+                //};
 
                 BankAccountKey bankAccountKey = new BankAccountKey();
                 bankAccountKey.CompanyKey = companyKey;
@@ -310,12 +314,12 @@ namespace IntegrationWS.Controllers
                 else
                     bankAccountKey.Id = "CC02_DIA";
 
-                payablesCashDetail.BankAccountKey = bankAccountKey;
+                //payablesCashDetail.BankAccountKey = bankAccountKey;
 
-                
 
                 PayablesPayment payablesPayment = new PayablesPayment();
-                payablesPayment.Cash = payablesCashDetail;
+                //payablesPayment.Cash = payablesCashDetail;
+                payablesPayment.Check = new CheckDetail { };
 
                 // Create a payables invoice object                     
                 payablesInvoice.Key = invoiceKey;
@@ -326,9 +330,6 @@ namespace IntegrationWS.Controllers
                 payablesInvoice.Date = registroGastoDTO.Fecha_de_consumo__c;                
                 payablesInvoice.Payment = payablesPayment;
                 payablesInvoice.Description = registroGastoDTO.Descripci_n__c;
-
-                //payablesInvoice.Distributions = distributions;
-
                 //Policy
                 payablesInvoiceCreatePolicy = wsDynamicsGP.GetPolicyByOperation("CreatePayablesInvoice", context);
 
@@ -345,11 +346,16 @@ namespace IntegrationWS.Controllers
                 {
                     var fecha = registroGastoDTO.Fecha_de_consumo__c.ToString("yyyy.MM.dd");
                     var TipoGastoNCF = registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim();                  
-                    db_dev.Database.ExecuteSqlCommand($"BNRD_SP_RegistrarNCFaCPB '{response1.PROVEEDOR}', '{registroGastoDTO.Numero_de_factura__c}', '{registroGastoDTO.NCF__c}', '{registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim()}', '{CPB}', '{registroGastoDTO.Divisi_n__c}'");
+                    db_dev.Database.ExecuteSqlCommand($"BNRD_SP_RegistrarNCFaCPB '{response1.PROVEEDOR}', '{registroGastoDTO.Numero_de_factura__c}', '{registroGastoDTO.NCF__c}', '{registroGastoDTO.Tipo_de_gasto_NFC__c.Substring(0, 2).Trim()}', '{CPB}', '{registroGastoDTO.Divisi_n__c}', '{registroGastoDTO.Sucursal__c}', '{registroGastoDTO.Tipo__c}'");
                 }
 
                 string CPB_LOTE = invoiceKey.Id + ',' + batchKey.Id;
                 return Content(HttpStatusCode.Created, CPB_LOTE);
+            }
+            catch(FaultException<ExceptionDetail> fe)
+            {
+                ModelState.AddModelError("Message", fe.Message);
+                return BadRequest(ModelState);
             }
             catch(Exception e)
             {

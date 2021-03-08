@@ -26,5 +26,7 @@ namespace IntegrationWS.DTOs
         public string Divisi_n__c { get; set; }
         [Required]
         public string Descripci_n__c { get; set; }
+        public string Tipo__c { get; set; }
+        public string Sucursal__c { get; set; }
     }
 }
