@@ -25,6 +25,7 @@ namespace IntegrationWS.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Producto> Productos { get; set; }
+        public DbSet<Notificacion_de_pedido_espera> Notificacion_de_pedido_espera { get; set; }
         public DbSet<TransferenciaProducto> TransferenciaProducto { get; set; }
         public DbSet<Ubicacion> Ubicaciones { get; set; }
         public DbSet<ArticuloProducto> ArticuloProducto { get; set; }

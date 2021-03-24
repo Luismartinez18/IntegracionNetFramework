@@ -14,10 +14,12 @@ namespace IntegrationWS.ModelsNotMapped
         public int? EstaAnulado__c { get; set; }
         public string Name { get; set; }
         public string OwnerId { get; set; }
+        public string Propietario__c { get; set; }
         //[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         //public string Pricebook2Id { get; set; }
         public string Pedido_Dynamics__c { get; set; }
         public string Pedido_Vendedor__c { get; set; }
+        public string Vendedor__c { get; set; }
         //public string PoNumber { get; set; }
         public string CurrencyIsoCode { get; set; }
         public string ShippingStreet__c { get; set; }

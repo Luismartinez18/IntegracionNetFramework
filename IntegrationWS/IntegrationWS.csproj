@@ -869,6 +869,7 @@
     <Compile Include="Integrations\Interfaces\IProductoDeContrato.cs" />
     <Compile Include="Integrations\Interfaces\IProductoDePedido.cs" />
     <Compile Include="Integrations\Interfaces\IProductoDeOportunidad.cs" />
+    <Compile Include="Integrations\Interfaces\INotificacionPedidoEspera.cs" />
     <Compile Include="Integrations\Interfaces\IProductos.cs" />
     <Compile Include="Integrations\Interfaces\ITransferenciasProductos.cs" />
     <Compile Include="Integrations\Interfaces\IUbicaciones.cs" />
@@ -880,6 +881,7 @@
     <Compile Include="Integrations\ProductoDeContrato.cs" />
     <Compile Include="Integrations\ProductoDePedido.cs" />
     <Compile Include="Integrations\ProductoDeOportunidad.cs" />
+    <Compile Include="Integrations\NotificacionPedidoEspera.cs" />
     <Compile Include="Integrations\Productos.cs" />
     <Compile Include="Integrations\TransferenciasProductos.cs" />
     <Compile Include="Integrations\Ubicaciones.cs" />
@@ -1001,6 +1003,10 @@
     <Compile Include="Migrations\202101121228049_agregando_tabla_producto_de_contrato.Designer.cs">
       <DependentUpon>202101121228049_agregando_tabla_producto_de_contrato.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202103232015191_agregando_tabla_notificacion_pedido_espera.cs" />
+    <Compile Include="Migrations\202103232015191_agregando_tabla_notificacion_pedido_espera.Designer.cs">
+      <DependentUpon>202103232015191_agregando_tabla_notificacion_pedido_espera.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelsNotMapped\AccountSf.cs" />
     <Compile Include="ModelsNotMapped\AccountTeamMember.cs" />
@@ -1014,6 +1020,7 @@
     <Compile Include="ModelsNotMapped\Excepci_n_FEFO__c.cs" />
     <Compile Include="ModelsNotMapped\LocationSf.cs" />
     <Compile Include="ModelsNotMapped\ContratoLineItem.cs" />
+    <Compile Include="ModelsNotMapped\NotificacionPedidosEnEsperaSf.cs" />
     <Compile Include="ModelsNotMapped\PedidoLineItem.cs" />
     <Compile Include="ModelsNotMapped\OpportunityLineItem.cs" />
     <Compile Include="ModelsNotMapped\ContractSf.cs" />
@@ -1061,6 +1068,7 @@
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Producto.cs" />
+    <Compile Include="Models\Notificacion_de_pedido_espera.cs" />
     <Compile Include="Models\Producto_de_contrato.cs" />
     <Compile Include="Models\Producto_de_pedido.cs" />
     <Compile Include="Models\Producto_de_oportunidad.cs" />
@@ -1199,6 +1207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101121228049_agregando_tabla_producto_de_contrato.resx">
       <DependentUpon>202101121228049_agregando_tabla_producto_de_contrato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103232015191_agregando_tabla_notificacion_pedido_espera.resx">
+      <DependentUpon>202103232015191_agregando_tabla_notificacion_pedido_espera.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

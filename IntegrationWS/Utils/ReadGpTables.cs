@@ -39,6 +39,7 @@ namespace IntegrationWS.Utils
         private readonly IExcepcionesFEFO _excepcionesFEFO;
         private readonly IExcepcionesFEFODetalle _excepcionesFEFODetalle;
         private readonly IDocumentoAbierto _documentoAbierto;
+        private readonly INotificacionPedidoEspera _notificacionPedidoEspera;
 
         //Variables globales
         string authToken = string.Empty;
@@ -65,7 +66,8 @@ namespace IntegrationWS.Utils
                               IExcepcionesFEFODetalle excepcionesFEFODetalle,
                               IDocumentoAbierto documentoAbierto,
                               IContratos contratos,
-                              IPedidos pedidos)
+                              IPedidos pedidos,
+                              INotificacionPedidoEspera notificacionPedidoEspera)
         {
             _productos = productos;
             _articulosProductos = articulosProductos;
@@ -87,6 +89,7 @@ namespace IntegrationWS.Utils
             _documentoAbierto = documentoAbierto;
             _contratos = contratos;
             _pedidos = pedidos;
+            _notificacionPedidoEspera = notificacionPedidoEspera;
         }
         public async Task Run()
         {
@@ -1377,6 +1380,57 @@ namespace IntegrationWS.Utils
                                         if (salesforceResponse != "Ok")
                                         {
                                             throw new Exception(salesforceResponse);
+                                        }
+                                    }
+                                }
+
+                                //Notificación de pedido en espera Salesforce
+                                if (general_Audit.TableName == "NPES")
+                                {
+                                    if (general_Audit.Activity == "INSERT" || general_Audit.Activity == "UPDATE")
+                                    {
+                                        Notificacion_de_pedido_espera notificacion = new Notificacion_de_pedido_espera();
+                                        notificacion.DynamicsId = Db.Notificacion_de_pedido_espera.Where(x => x.DynamicsId == general_Audit.DynamicsId).Select(x => x.DynamicsId).FirstOrDefault();
+
+                                        if (notificacion.DynamicsId == null)
+                                        {
+                                            var salesforceId = await _notificacionPedidoEspera.create(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceId == "actualizado")
+                                            {
+                                                Db_Dev.General_Audit.Remove(general_Audit);
+                                                general_Audit_History.TableName = general_Audit.TableName;
+                                                general_Audit_History.DynamicsId = general_Audit.DynamicsId;
+                                                general_Audit_History.Activity = general_Audit.Activity;
+                                                general_Audit_History.DoneBy = general_Audit.DoneBy;
+                                                general_Audit_History.DateOfChanged = general_Audit.DateOfChanged;
+                                                Db_Dev.General_Audit_History.Add(general_Audit_History);
+                                                Db_Dev.SaveChanges();
+                                                continue;
+                                            }
+
+                                            if (!salesforceId.Contains("errorCode"))
+                                            {
+                                                JObject obj2 = JObject.Parse(salesforceId);
+                                                salesforceId = (string)obj2["id"];
+                                                notificacion.SalesforceId = salesforceId;
+                                                notificacion.DynamicsId = general_Audit.DynamicsId;
+                                                Db.Notificacion_de_pedido_espera.Add(notificacion);
+                                                Db.SaveChanges();
+                                            }
+                                            else
+                                            {
+                                                throw new Exception(salesforceId);
+                                            }
+                                        }
+                                        else if (notificacion.DynamicsId != null)
+                                        {
+                                            var salesforceResponse = await _notificacionPedidoEspera.update(general_Audit.DynamicsId, loginResult, authToken, serviceURL);
+
+                                            if (salesforceResponse != "Ok")
+                                            {
+                                                throw new Exception(salesforceResponse);
+                                            }
                                         }
                                     }
                                 }

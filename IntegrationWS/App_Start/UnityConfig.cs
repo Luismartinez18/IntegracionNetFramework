@@ -44,6 +44,7 @@ namespace IntegrationWS
             container.RegisterType<IDocumentoAbierto, DocumentoAbierto>();
             container.RegisterType<IProductoConLoteUtils, ProductoConLoteUtils>();
             container.RegisterType<IPedidos, PedidoServices>();
+            container.RegisterType<INotificacionPedidoEspera, NotificacionPedidoEspera>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
