@@ -22,5 +22,8 @@ namespace IntegrationWS.ModelsNotMapped
         public string Unidad_Medida_Recibida_Recepcion__c { get; set; }
         public string Usuario_Creacion_Pedido_Espera__c { get; set; }
         public string Usuario_Creacion_Salesforce__c { get; set; }
+        public string Pedido_en_espera__c { get; set; }
+        public string Producto__c { get; set; }
+        public string Cuenta__c { get; set; }
     }
 }

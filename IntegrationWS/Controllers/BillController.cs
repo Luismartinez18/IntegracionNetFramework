@@ -489,8 +489,8 @@ namespace IntegrationWS.Controllers
                             db_bnrd.Database.ExecuteSqlCommand("EXEC ICONBNRD_SRVINT_ActualizaFacturasInternas");
                         }
 
-
-                        db_bnrd.Database.ExecuteSqlCommand($"EXEC Sp_AsignaNcfFacturaAbierta '{respuesta}'");
+                        if (caseDTO.Facturainterna == false)
+                            db_bnrd.Database.ExecuteSqlCommand($"EXEC Sp_AsignaNcfFacturaAbierta '{respuesta}'");
                     }
 
 
