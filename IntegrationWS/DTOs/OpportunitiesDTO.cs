@@ -11,6 +11,7 @@ namespace IntegrationWS.DTOs
         public string CodigoCliente { get; set; }
         public string Name { get; set; }
         public string Sucursal { get; set; }
+        public string Vendedor { get; set; }
         public List<OpportunityLineItemModel> OpportunityLineItemModels { get; set; }
     }
 }

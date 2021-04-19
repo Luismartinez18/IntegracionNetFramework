@@ -75,7 +75,7 @@ namespace IntegrationWS.Controllers
 
                     // Create a batch key
                     batchKey = new BatchKey();
-                    batchKey.Id = $"PED{DateTime.Now.ToString("ddMMyyyy")}";
+                    batchKey.Id = $"PED{DateTime.Now:ddMMyyyy}";
 
 
                     CommentKey commentKey = new CommentKey();
@@ -83,6 +83,11 @@ namespace IntegrationWS.Controllers
 
                     salesOrder.CommentKey = commentKey;
                     salesOrder.Comment = opportunitiesDTO.Name;
+                    if(!string.IsNullOrEmpty(opportunitiesDTO.Vendedor))
+                        salesOrder.SalespersonKey = new SalespersonKey
+                        {
+                            Id = opportunitiesDTO.Vendedor
+                        };
 
                     // Set the batch key property of the sales order object
                     salesOrder.BatchKey = batchKey;
