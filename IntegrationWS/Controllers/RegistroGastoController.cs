@@ -96,7 +96,7 @@ namespace IntegrationWS.Controllers
                 }
                 else
                 {
-                    if (registroGastoDTO.Departamento__c == "Diagnóstica" || registroGastoDTO.Departamento__c == "Médica" || registroGastoDTO.Departamento__c == "Hospitalaria")
+                    if (registroGastoDTO.Departamento__c == "Diagnóstica" || registroGastoDTO.Departamento__c == "Médica" || registroGastoDTO.Departamento__c == "Hospitalaria" || registroGastoDTO.Departamento__c == "Ingeniería y Aplicaciones")
                         VENDOR_ID = "000031";
                     else
                         VENDOR_ID = "ZZCAJA";
