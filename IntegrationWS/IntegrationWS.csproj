@@ -819,6 +819,7 @@
     <Compile Include="Controllers\BulkApiController.cs" />
     <Compile Include="Controllers\ComisionMedicaController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\OpportunityToQuoteController.cs" />
     <Compile Include="Controllers\Order2Controller.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -842,6 +843,7 @@
     <Compile Include="DTOs\PresupuestoDTO.cs" />
     <Compile Include="DTOs\ProductDTO.cs" />
     <Compile Include="DTOs\RegistroGastoDTO.cs" />
+    <Compile Include="DTOs\StockPlanDTO.cs" />
     <Compile Include="DTOs\UserForLoginDTO.cs" />
     <Compile Include="DTOs\UserForRegisterDTO.cs" />
     <Compile Include="DTOs\VendoorDTO.cs" />
