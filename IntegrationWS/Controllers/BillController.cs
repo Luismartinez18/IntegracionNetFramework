@@ -3,6 +3,7 @@ using IntegrationWS.DTOs;
 using IntegrationWS.DynamicsGPService;
 using IntegrationWS.Models;
 using IntegrationWS.ModelsNotMapped;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -172,7 +173,7 @@ namespace IntegrationWS.Controllers
                                     throw new Exception($"El producto {product.C_digo_del_producto__c} esta vencido.");
                                 }
 
-                                if (product.Lote__c != string.Empty)
+                                if (!product.Lote__c.IsNullOrEmpty())
                                 {
                                     if (responseProductFecha == 2)
                                     {
