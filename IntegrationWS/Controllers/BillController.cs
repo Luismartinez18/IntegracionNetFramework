@@ -3,6 +3,7 @@ using IntegrationWS.DTOs;
 using IntegrationWS.DynamicsGPService;
 using IntegrationWS.Models;
 using IntegrationWS.ModelsNotMapped;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -157,6 +158,29 @@ namespace IntegrationWS.Controllers
                                 {
                                     throw new Exception($"El producto {product.C_digo_del_producto__c} no tiene la cantidad suficiente para consumir.");
                                 }
+
+                                var responseProduct = db_bnrd.Database.SqlQuery<int>($"EXEC VerficicarProductoActivo '{product.C_digo_del_producto__c}' ").FirstOrDefault();
+
+                                if (responseProduct == 1)
+                                {
+                                    throw new Exception($"El producto {product.C_digo_del_producto__c} esta inactivo.");
+                                }
+
+                                var responseProductFecha = db_bnrd.Database.SqlQuery<int>($"EXEC VerficicarFechaDeVencimientoProducto '{product.Locker__c}', '{product.C_digo_del_producto__c}', '{product.Lote__c}' ").FirstOrDefault();
+
+                                if (responseProductFecha == 1)
+                                {
+                                    throw new Exception($"El producto {product.C_digo_del_producto__c} esta vencido.");
+                                }
+
+                                if (!product.Lote__c.IsNullOrEmpty())
+                                {
+                                    if (responseProductFecha == 2)
+                                    {
+                                        throw new Exception($"El producto {product.C_digo_del_producto__c}  no existe en el locker {product.Locker__c} con el lote {product.Lote__c}.");
+                                    }
+                                }
+                                
                             }
                         }
 

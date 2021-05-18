@@ -41,6 +41,17 @@ namespace IntegrationWS.Controllers
                     {
                         return Content(HttpStatusCode.Created, CPBFromDB.Trim());
                     }
+
+                    var result = db_dev.Database.SqlQuery<string>($"EXEC sp_VerificarRegistroGasto '{registroGastoDTO.RNC__c}', '{registroGastoDTO.NCF__c}'").FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        if (result == "SI")
+                        {
+                            ModelState.AddModelError("Message", $"El NCF '{registroGastoDTO.NCF__c}' existe con el RNC '{registroGastoDTO.RNC__c}'.");
+                            return BadRequest(ModelState);
+                        }
+                    }
                 }
 
                 string VENDOR_ID = string.Empty;
