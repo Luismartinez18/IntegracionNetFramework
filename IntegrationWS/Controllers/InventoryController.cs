@@ -67,7 +67,7 @@ namespace IntegrationWS.Controllers
                         varancialine.ItemKey = itemKey;
 
                         varancialine.Key = new InventoryLineKey();
-                        varancialine.Key.SequenceNumber = counted;
+                        varancialine.Key.SequenceNumber = Convert.ToInt32(item.counted);
                         quantity = new Quantity();
                         quantity.Value = item.Variation;
                         varancialine.Quantity = quantity;
@@ -84,11 +84,11 @@ namespace IntegrationWS.Controllers
                             if (item.TypeitemNumber == 3)
                             {
                                 var itemlotkey = new InventoryLot();
-                                itemlotkey.LotNumber = itemlot.LotNumber;
+                                itemlotkey.LotNumber = itemlot.LotNumber.Trim();
                                 itemlotkey.Key = new InventoryLotKey();
                                 itemlotkey.Key.SequenceNumber = itemlot.DateSEQNumber;
                                 itemlotkey.Key.InventoryLineKey = new InventoryLineKey();
-                                itemlotkey.Key.InventoryLineKey.SequenceNumber = counted;
+                                itemlotkey.Key.InventoryLineKey.SequenceNumber = Convert.ToInt32(decimal.Round(item.counted,0));
                                 itemlotkey.Quantity = new Quantity();
                                 itemlotkey.Quantity.Value = itemlot.Variation;
                                 itemlotkey.ReceivedDate = itemlot.DateReceived.Value.Date;
@@ -98,11 +98,11 @@ namespace IntegrationWS.Controllers
                             else if (item.TypeitemNumber == 2)
                             {
                                 var itemseriakey = new InventorySerial();
-                                itemseriakey.SerialNumber = itemlot.LotNumber;
+                                itemseriakey.SerialNumber = itemlot.LotNumber.Trim();
                                 itemseriakey.Key = new InventorySerialKey();
                                 itemseriakey.Key.SequenceNumber = itemlot.DateSEQNumber;
                                 itemseriakey.Key.InventoryLineKey = new InventoryLineKey();
-                                itemseriakey.Key.InventoryLineKey.SequenceNumber = counted;
+                                itemseriakey.Key.InventoryLineKey.SequenceNumber = item.counted;
                                 inventorySerialBases.Add(itemseriakey);
                             }
                         }

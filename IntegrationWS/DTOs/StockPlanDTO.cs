@@ -25,6 +25,7 @@ namespace IntegrationWS.DTOs
         public decimal UnitCost { get; set; }
         public decimal Variation { get; set; }
         public short TypeitemNumber { get; set; }
+        public decimal counted { get; set; }
         public List<StockPlanSerialLotDTO> Detail { get; set; }
 
     }
