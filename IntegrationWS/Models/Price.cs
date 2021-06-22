@@ -13,5 +13,6 @@ namespace IntegrationWS.Models
         public string Currency { get; set; }
         public decimal UnitPrice { get; set; }
         public string Division { get; set; }
+        public decimal ExistenciaToDisplay { get; set; }
     }
 }
