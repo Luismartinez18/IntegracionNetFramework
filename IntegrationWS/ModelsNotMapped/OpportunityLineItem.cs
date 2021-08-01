@@ -15,5 +15,6 @@ namespace IntegrationWS.ModelsNotMapped
         public decimal UnitPrice { get; set; }
         public string Product2Id { get; set; }
         public string Integration_Dynamics_Id__c { get; set; }
+        public decimal Impuesto__c { get; set; }
     }
 }

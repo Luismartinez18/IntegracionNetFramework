@@ -147,7 +147,7 @@ namespace IntegrationWS.Integrations
         {
             OpportunitySf opportunity = await getOne(Id, loginResult);        
 
-            opportunity.Pricebook2Id = null;
+            //opportunity.Pricebook2Id = null;
             var result = await _sobjectCRUD.updateSobjectByIdAsync(loginResult, opportunity, SalesforceId, sobject);
 
             if (result != "Ok")

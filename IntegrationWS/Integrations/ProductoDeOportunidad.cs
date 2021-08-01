@@ -67,7 +67,26 @@ namespace IntegrationWS.Integrations
 
                     result = "errorCode";
                     return result;
-                }                
+                }
+
+                if (result.Contains("Error: No puede seleccionar los productos hasta que no haya seleccionado una lista de precios para esta oportunidad en la lista relacionada de los productos."))
+                {
+                    using (DevelopmentDbContext db_dev = new DevelopmentDbContext())
+                    {
+                        General_Audit newForSOP30200 = new General_Audit();
+                        newForSOP30200.Activity = "UPDATE";
+                        newForSOP30200.DateOfChanged = DateTime.Now;
+                        newForSOP30200.DoneBy = "integrationgp";
+                        newForSOP30200.DynamicsId = $"{Id}";
+                        newForSOP30200.HasChanged = 1;
+                        newForSOP30200.TableName = "SOP30200";
+                        db_dev.General_Audit.Add(newForSOP30200);
+                        db_dev.SaveChanges();
+                    }
+
+                    result = "errorCode";
+                    return result;
+                }
 
                 if (result.Contains("DUPLICATE"))
                 {

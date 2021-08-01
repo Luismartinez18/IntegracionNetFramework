@@ -23,10 +23,11 @@ namespace IntegrationWS.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            var prices = db.Database.SqlQuery<Price>("ListaPreciosPorClientePorProducto @customer,@product,@currency",
+            var prices = db.Database.SqlQuery<Price>("ListaPreciosPorClientePorProducto @customer,@product,@currency,@almacen",
             new SqlParameter("@product", request.Product),
             new SqlParameter("@customer", request.Customer),
-            new SqlParameter("@currency", request.CurrencyIsoCode));
+            new SqlParameter("@currency", request.CurrencyIsoCode),
+            new SqlParameter("@almacen", string.Empty));
             var gpr = new GetPriceResponse();
             gpr.Product = request.Product;
             gpr.Prices = prices.Select(x => new GetPriceResponse.Price { UnitOfMeasure = x.UnitOfMeasure, UnitPrice = x.UnitPrice }).ToList();
@@ -87,7 +88,7 @@ namespace IntegrationWS.Controllers
             public string Customer { get; set; }
             [Required]
             public string CurrencyIsoCode { get; set; }
-            [Required]
+            //[Required]
             public string Almacen { get; set; }
         }
         public class GetPriceResponse
