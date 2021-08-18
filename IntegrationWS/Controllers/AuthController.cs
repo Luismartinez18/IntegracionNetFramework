@@ -24,7 +24,7 @@ namespace IntegrationWS.Controllers
 
         [HttpPost]
         [Route("register")]
-        [Authorize]
+        //[Authorize]
         public async Task<IHttpActionResult> Register([FromBody]UserForRegisterDTO userForRegisterDTO)
         {
             userForRegisterDTO.Username = userForRegisterDTO.Username.Trim().ToLower();
