@@ -30,6 +30,11 @@ namespace IntegrationWS.Integrations
         {
             DocumentoAbiertoSf docAbiertoSf = getOne(Id);
 
+            if (docAbiertoSf == null) 
+            {
+                return "actualizado";
+            }
+
             var result = await _sobjectCRUD.addSobjectAsync(loginResult, docAbiertoSf, sobject);
 
             if (result.Contains("DUPLICATE"))
