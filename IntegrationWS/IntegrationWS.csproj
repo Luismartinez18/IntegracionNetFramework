@@ -918,6 +918,7 @@
     <Compile Include="Integrations\Interfaces\IEntradaDelCatalogoDePrecios.cs" />
     <Compile Include="Integrations\Interfaces\IExcepcionesFEFO.cs" />
     <Compile Include="Integrations\Interfaces\IExcepcionesFEFODetalle.cs" />
+    <Compile Include="Integrations\Interfaces\IJournalEntry.cs" />
     <Compile Include="Integrations\Interfaces\IListaDePrecios.cs" />
     <Compile Include="Integrations\Interfaces\IContratos.cs" />
     <Compile Include="Integrations\Interfaces\IPedidos.cs" />
@@ -930,6 +931,7 @@
     <Compile Include="Integrations\Interfaces\IProductos.cs" />
     <Compile Include="Integrations\Interfaces\ITransferenciasProductos.cs" />
     <Compile Include="Integrations\Interfaces\IUbicaciones.cs" />
+    <Compile Include="Integrations\JournalEntry.cs" />
     <Compile Include="Integrations\ListaDePrecios.cs" />
     <Compile Include="Integrations\Contratos.cs" />
     <Compile Include="Integrations\PedidoServices.cs" />
@@ -1118,6 +1120,7 @@
     <Compile Include="Models\General_Audit.cs" />
     <Compile Include="Models\General_Audit_History.cs" />
     <Compile Include="Models\IntegrationResult.cs" />
+    <Compile Include="Models\JournalEntryHeader.cs" />
     <Compile Include="Models\LIsta_De_Precios.cs" />
     <Compile Include="Models\Contrato.cs" />
     <Compile Include="Models\Pedidos.cs" />
