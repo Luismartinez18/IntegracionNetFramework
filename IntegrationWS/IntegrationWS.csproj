@@ -877,6 +877,7 @@
     <Compile Include="Controllers\Order2Controller.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PriceController.cs" />
+    <Compile Include="Controllers\PrintLabelsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\RegistroGastoController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
@@ -891,6 +892,7 @@
     <Compile Include="DTOs\CaseDTO.cs" />
     <Compile Include="DTOs\ComisionMedicaDTO.cs" />
     <Compile Include="DTOs\LeadDTO.cs" />
+    <Compile Include="DTOs\MaintenancePlan.cs" />
     <Compile Include="DTOs\OpportunitiesDTO.cs" />
     <Compile Include="DTOs\OpportunityLineItemModel.cs" />
     <Compile Include="DTOs\PresupuestoDTO.cs" />
@@ -942,6 +944,7 @@
     <Compile Include="Integrations\ProductoDeOportunidad.cs" />
     <Compile Include="Integrations\NotificacionPedidoEspera.cs" />
     <Compile Include="Integrations\Productos.cs" />
+    <Compile Include="Integrations\RawPrinterHelper.cs" />
     <Compile Include="Integrations\TransferenciasProductos.cs" />
     <Compile Include="Integrations\Ubicaciones.cs" />
     <Compile Include="Migrations.BNRD\Configuration.cs" />
@@ -1185,6 +1188,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\JournalEntry\" />
+    <Folder Include="Views\PrintLabels\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

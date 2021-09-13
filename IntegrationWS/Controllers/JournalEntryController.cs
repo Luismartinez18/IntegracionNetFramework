@@ -72,7 +72,7 @@ namespace IntegrationWS.Controllers
             add.JournalId = await _journalEntry.GetNumJournalEntry(add.InterId);
             var data =await _journalEntry.SendDynamics(add);
             if(data== "Procesada")
-                return Ok("Procesada");
+                return Ok($"Nomina: ({add.Payroll}) fue procesada, Número de Entrada de Diario: { add.JournalId}");
             else return BadRequest(data);
         }
     }

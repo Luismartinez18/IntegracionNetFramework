@@ -20,7 +20,7 @@ namespace IntegrationWS.Controllers
     public class RegistroGastoController : ApiController
     {
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IHttpActionResult get([FromBody] RegistroGastoDTO registroGastoDTO)
         {
             try
